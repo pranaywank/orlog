@@ -1,0 +1,3781 @@
+{
+  "_meta": {
+    "description": "Orlog PM Personality Test — Question Bank",
+    "totalQuestions": 100,
+    "version": "1.0.0",
+    "dimensions": {
+      "seer": "The Seer — Visionary, big-picture, future-focused",
+      "forge": "The Forge — Executor, delivery-focused, process-driven",
+      "mirror": "The Warden — Customer-obsessed, empathy-first",
+      "compass": "The Sage — Data-led, analytical, metrics-driven",
+      "herald": "The Weaver — Collaborative, stakeholder-focused, diplomatic",
+      "anchor": "The Sovereign — High ownership, independent, founder-minded"
+    },
+    "scoringNote": "Each option awards +2 to the primary type and +1 to a secondary type. Sliders award points based on scale position: 4-5 maps to high_type (+2), 1-2 maps to low_type (+2), 3 is neutral.",
+    "storageStrategy": "JSON file in /constants/ — questions are static and bundled at build time. Supabase is used only for writing session results and reading analytics (admin). Questions themselves never touch the database.",
+    "questionDistribution": {
+      "Thinking Style": "Q1-Q25 — 15 scenario, 7 forced_choice, 3 slider",
+      "Decision Driver": "Q26-Q50 — 15 scenario, 7 forced_choice, 3 slider",
+      "Work Mode": "Q51-Q75 — 15 scenario, 7 forced_choice, 3 slider",
+      "Focus Area": "Q76-Q100 — 15 scenario, 7 forced_choice, 3 slider"
+    }
+  },
+  "questions": [
+
+
+
+
+    {
+      "id": 1,
+      "dimension": "Thinking Style",
+      "format": "scenario",
+      "text": "Your company is planning next year's roadmap. The CEO wants a 3-year vision slide. Your engineering lead wants a 6-month delivery plan. You have one week to prepare. What do you focus on?",
+      "category": "Strategy vs. Execution",
+      "options": [
+        {
+          "id": "a",
+          "text": "Build a compelling 3-year vision narrative with market trends and opportunity sizing.",
+          "scores": {
+            "seer": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Create a detailed 6-month delivery plan with milestones, owners, and dependencies.",
+          "scores": {
+            "forge": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Talk to customers first to validate what problems are worth solving before committing to either.",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Facilitate a cross-functional session to align both the CEO and engineering on a shared plan.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "dimension": "Thinking Style",
+      "format": "scenario",
+      "text": "A competitor just launched a feature your team has been debating for 6 months. Leadership is panicking. What is your first move?",
+      "category": "Competitive Response",
+      "options": [
+        {
+          "id": "a",
+          "text": "Zoom out — assess whether this competitor move changes your long-term strategic bet at all.",
+          "scores": {
+            "seer": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Immediately scope the fastest version of the feature your team can ship in 4 weeks.",
+          "scores": {
+            "forge": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Call 10 customers to understand if this competitor feature actually matters to them.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Pull together leadership, engineering, and design to align on a response before acting.",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "dimension": "Thinking Style",
+      "format": "scenario",
+      "text": "You are given 20% time — one full day per week — with no deliverables attached. How do you use it?",
+      "category": "Discretionary Time",
+      "options": [
+        {
+          "id": "a",
+          "text": "Research emerging trends, adjacent markets, and future user behaviors to identify your next big bet.",
+          "scores": {
+            "seer": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Clear the backlog of small improvements your team has been too busy to ship.",
+          "scores": {
+            "forge": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Spend it entirely on customer interviews and unmoderated user research.",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Use it to strengthen relationships with cross-functional partners and understand their pain points.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "dimension": "Thinking Style",
+      "format": "scenario",
+      "text": "You are writing a product strategy document. Which section do you spend the most time on?",
+      "category": "Strategy Writing",
+      "options": [
+        {
+          "id": "a",
+          "text": "The vision and market opportunity — painting a picture of where the world is going.",
+          "scores": {
+            "seer": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "The execution plan — phases, timelines, success metrics, and owners.",
+          "scores": {
+            "forge": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "The user problem definition — making sure the pain point is real and well-understood.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "The stakeholder alignment section — who needs to be bought in and how.",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "dimension": "Thinking Style",
+      "format": "scenario",
+      "text": "Your product is growing but slowly. The board wants to 10x growth in 18 months. What is your instinctive response?",
+      "category": "Growth Strategy",
+      "options": [
+        {
+          "id": "a",
+          "text": "Identify a bold strategic pivot or new market expansion that could unlock exponential growth.",
+          "scores": {
+            "seer": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Map every current growth lever, find the top 3, and execute on them with relentless focus.",
+          "scores": {
+            "forge": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Go deep with your best customers to understand what would make them refer others or expand usage.",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Convene a cross-functional growth task force with marketing, sales, and engineering.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "dimension": "Thinking Style",
+      "format": "scenario",
+      "text": "You have two feature ideas on the table. Feature A takes 3 months with guaranteed moderate impact. Feature B takes 6 months with a small chance of massive impact. Which do you fight for?",
+      "category": "Risk vs. Reward",
+      "options": [
+        {
+          "id": "a",
+          "text": "Feature B — the asymmetric upside is worth the risk and longer timeline.",
+          "scores": {
+            "seer": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Feature A — predictable impact shipped faster is more valuable than a moonshot.",
+          "scores": {
+            "forge": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Neither until I've validated both with real users to see which problem is more painful.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Present both options to stakeholders and build consensus before deciding.",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "dimension": "Thinking Style",
+      "format": "scenario",
+      "text": "A senior engineer says your 1-year roadmap is unrealistic — it's 2 years of work. How do you respond?",
+      "category": "Roadmap Conflict",
+      "options": [
+        {
+          "id": "a",
+          "text": "Stand firm on the vision — ambitious timelines push teams to think creatively and cut scope wisely.",
+          "scores": {
+            "seer": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Immediately sit down with them to re-scope the roadmap into realistic phases.",
+          "scores": {
+            "forge": 2,
+            "herald": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Ask which parts of the roadmap will most directly impact user outcomes and prioritize those.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Bring engineering, design, and leadership into a joint session to re-plan together.",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "dimension": "Thinking Style",
+      "format": "scenario",
+      "text": "You are onboarding to a new PM role. In your first 30 days, what are you primarily focused on?",
+      "category": "Onboarding",
+      "options": [
+        {
+          "id": "a",
+          "text": "Understanding the market landscape, competitive dynamics, and long-term strategic direction.",
+          "scores": {
+            "seer": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Learning the current sprint, backlog, and what is blocking the team from shipping.",
+          "scores": {
+            "forge": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Speaking to as many customers as possible to understand their problems firsthand.",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Building relationships with every stakeholder — engineering, design, sales, support, leadership.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "dimension": "Thinking Style",
+      "format": "scenario",
+      "text": "You can own Product X — early-stage 0-to-1 with no clear path — or Product Y — mature with clear metrics and a known roadmap. Which do you choose?",
+      "category": "Product Choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Product X — building something from nothing with freedom to define the vision is energizing.",
+          "scores": {
+            "seer": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Product Y — clear metrics, known roadmap, and defined success criteria let me execute well.",
+          "scores": {
+            "forge": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Product X — early stage means more direct customer contact and real problem discovery.",
+          "scores": {
+            "mirror": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Product Y — a mature product means a larger team and more cross-functional collaboration.",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "dimension": "Thinking Style",
+      "format": "scenario",
+      "text": "Your product is approaching a major inflection point. You can double down on your current strategy or pivot to a new market. How do you decide?",
+      "category": "Strategic Decision",
+      "options": [
+        {
+          "id": "a",
+          "text": "Trust your conviction — you have a point of view on where the market is going and commit to it.",
+          "scores": {
+            "seer": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Run a structured analysis: compare ROI, risk, and timeline of both paths before deciding.",
+          "scores": {
+            "forge": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Talk to your best and worst customers — their answers will tell you whether to stay or pivot.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Convene a strategy offsite with all key stakeholders to debate and align on the direction.",
+          "scores": {
+            "herald": 2,
+            "seer": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "dimension": "Thinking Style",
+      "format": "scenario",
+      "text": "A junior PM asks you what makes a great product. What is your answer?",
+      "category": "PM Philosophy",
+      "options": [
+        {
+          "id": "a",
+          "text": "A great product solves a future problem before the user knows they have it.",
+          "scores": {
+            "seer": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "A great product ships reliably, works well, and continuously improves based on feedback.",
+          "scores": {
+            "forge": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "A great product makes a user's life meaningfully better in a way they can feel.",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "A great product is built by a team that is deeply aligned and trusted by the whole company.",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "dimension": "Thinking Style",
+      "format": "scenario",
+      "text": "You are asked to present your product area to the board. What does your presentation lead with?",
+      "category": "Board Communication",
+      "options": [
+        {
+          "id": "a",
+          "text": "The market opportunity and your 3-year vision for where this product category is heading.",
+          "scores": {
+            "seer": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "What you shipped last quarter, what you're shipping next quarter, and key delivery metrics.",
+          "scores": {
+            "forge": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Customer stories and evidence that your product is solving real, painful problems.",
+          "scores": {
+            "mirror": 2,
+            "herald": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "A narrative on how your product fits into the company's broader strategic picture.",
+          "scores": {
+            "herald": 2,
+            "seer": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "dimension": "Thinking Style",
+      "format": "scenario",
+      "text": "Your team's headcount is being cut by 30% next quarter. What is your immediate priority?",
+      "category": "Resource Constraint",
+      "options": [
+        {
+          "id": "a",
+          "text": "Redefine what your product needs to become to stay relevant with a smaller team — rethink the strategy.",
+          "scores": {
+            "seer": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Immediately audit the roadmap and cut everything that isn't essential to ship with fewer people.",
+          "scores": {
+            "forge": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Identify which customer commitments must be protected and ensure those aren't compromised.",
+          "scores": {
+            "mirror": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Have honest conversations with the team and leadership to understand the full impact and align.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "dimension": "Thinking Style",
+      "format": "scenario",
+      "text": "A new technology (e.g. AI, AR) just became accessible to your industry. What is your reaction?",
+      "category": "Technology Adoption",
+      "options": [
+        {
+          "id": "a",
+          "text": "Immediately start exploring how this technology could fundamentally change your product category.",
+          "scores": {
+            "seer": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Wait for the technology to mature, then adopt it when there is a clear use case with proven ROI.",
+          "scores": {
+            "forge": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Ask users whether they would actually want this technology in the product before exploring it.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Bring together engineering and design to evaluate feasibility and form a shared point of view.",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "dimension": "Thinking Style",
+      "format": "scenario",
+      "text": "Your team just shipped a major feature. It performs okay — not great, not bad. What is your next step?",
+      "category": "Post-Launch",
+      "options": [
+        {
+          "id": "a",
+          "text": "Already thinking about version 2.0 — what this feature could become in 12 months with more investment.",
+          "scores": {
+            "seer": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Run a tight post-launch retrospective, document learnings, and optimize the feature iteratively.",
+          "scores": {
+            "forge": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Call users who used the feature and those who didn't — understand the gap.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Share results transparently with all stakeholders and align on whether to iterate or move on.",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "dimension": "Thinking Style",
+      "format": "forced_choice",
+      "text": "When writing a product spec, you naturally spend the most time on:",
+      "category": "Spec Writing",
+      "options": [
+        {
+          "id": "a",
+          "text": "The 'Why Now' section — market timing, strategic context, and opportunity framing.",
+          "scores": {
+            "seer": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "The requirements and edge cases — making sure engineering has everything they need.",
+          "scores": {
+            "forge": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "The user stories and jobs-to-be-done — keeping it grounded in real human behavior.",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "The stakeholder section — who is affected, who needs to approve, who needs to be informed.",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "dimension": "Thinking Style",
+      "format": "forced_choice",
+      "text": "You are most energized when you are:",
+      "category": "Motivation",
+      "options": [
+        {
+          "id": "a",
+          "text": "Crafting a product strategy that could change the direction of the company.",
+          "scores": {
+            "seer": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Watching a feature you planned carefully go live without a single bug.",
+          "scores": {
+            "forge": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Sitting with a user and watching them have an 'aha' moment with your product.",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Getting every stakeholder in the room to agree on a shared plan.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "dimension": "Thinking Style",
+      "format": "forced_choice",
+      "text": "You are most frustrated when:",
+      "category": "Frustration",
+      "options": [
+        {
+          "id": "a",
+          "text": "Your team is too focused on short-term tasks to think about where the product needs to go.",
+          "scores": {
+            "seer": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Deadlines are missed or plans change without clear reason.",
+          "scores": {
+            "forge": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Decisions are made without talking to a single customer.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Teams work in silos and nobody communicates what they are doing.",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "dimension": "Thinking Style",
+      "format": "forced_choice",
+      "text": "Your ideal product review meeting is one where:",
+      "category": "Meeting Style",
+      "options": [
+        {
+          "id": "a",
+          "text": "The team debates bold strategic bets and challenges assumptions about the future.",
+          "scores": {
+            "seer": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Every item has a clear owner, deadline, and status — no ambiguity.",
+          "scores": {
+            "forge": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Real user feedback and research is at the center of every decision.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Every function — engineering, design, marketing — has a voice and feels heard.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "dimension": "Thinking Style",
+      "format": "forced_choice",
+      "text": "When you think about your product 3 years from now, you are most focused on:",
+      "category": "Long-term Thinking",
+      "options": [
+        {
+          "id": "a",
+          "text": "The category you will have defined or disrupted.",
+          "scores": {
+            "seer": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "The systems, processes, and infrastructure you will have built.",
+          "scores": {
+            "forge": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "The number of users whose lives you will have meaningfully improved.",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "The cross-functional culture and team you will have shaped.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "dimension": "Thinking Style",
+      "format": "forced_choice",
+      "text": "You get a 1-hour slot with your CEO. You use it to discuss:",
+      "category": "CEO Time",
+      "options": [
+        {
+          "id": "a",
+          "text": "Where the market is heading and what strategic bets the company should be making now.",
+          "scores": {
+            "seer": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "What is blocking the team from shipping faster and what needs to change.",
+          "scores": {
+            "forge": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "What you are hearing from customers and what it means for the product direction.",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "How to improve cross-functional collaboration and reduce friction between teams.",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "dimension": "Thinking Style",
+      "format": "forced_choice",
+      "text": "If you had to describe your product thinking style in one word, it would be:",
+      "category": "Self-description",
+      "options": [
+        {
+          "id": "a",
+          "text": "Visionary",
+          "scores": {
+            "seer": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Systematic",
+          "scores": {
+            "forge": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Empathetic",
+          "scores": {
+            "mirror": 2,
+            "herald": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Collaborative",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "dimension": "Thinking Style",
+      "format": "slider",
+      "text": "I am more excited by defining where a product should go than by ensuring it gets there on time.",
+      "category": "Vision vs. Delivery",
+      "scale_low": "Strongly Disagree",
+      "scale_high": "Strongly Agree",
+      "low_maps_to": "forge",
+      "high_maps_to": "seer"
+    },
+    {
+      "id": 24,
+      "dimension": "Thinking Style",
+      "format": "slider",
+      "text": "I find it hard to stay motivated when working on incremental improvements rather than transformational ideas.",
+      "category": "Motivation Style",
+      "scale_low": "Strongly Disagree",
+      "scale_high": "Strongly Agree",
+      "low_maps_to": "forge",
+      "high_maps_to": "seer"
+    },
+    {
+      "id": 25,
+      "dimension": "Thinking Style",
+      "format": "slider",
+      "text": "A well-structured delivery plan gives me more confidence than a compelling vision document.",
+      "category": "Confidence Source",
+      "scale_low": "Strongly Disagree",
+      "scale_high": "Strongly Agree",
+      "low_maps_to": "seer",
+      "high_maps_to": "forge"
+    },
+
+
+
+
+    {
+      "id": 26,
+      "dimension": "Decision Driver",
+      "format": "scenario",
+      "text": "You run an A/B test on a new onboarding flow. Results are statistically inconclusive after 3 weeks. Your gut says the new flow is better. What do you do?",
+      "category": "Data vs. Intuition",
+      "options": [
+        {
+          "id": "a",
+          "text": "Wait longer for the data to reach significance before making any decision.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Ship the new flow — your intuition combined with directional data is enough to act.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Talk to users who went through both flows to understand their qualitative experience.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Bring the team together to review the data collectively and decide as a group.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "dimension": "Decision Driver",
+      "format": "scenario",
+      "text": "A sales rep tells you that 5 enterprise clients want a specific feature. You have no other data. Do you build it?",
+      "category": "Signal Quality",
+      "options": [
+        {
+          "id": "a",
+          "text": "No — 5 data points is not enough. Run a proper discovery process before committing resources.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Yes — enterprise signal from sales is real signal. Trust it and move quickly.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Maybe — but only after interviewing those 5 clients directly to understand the real job-to-be-done.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Bring sales and engineering together to assess feasibility and strategic fit before deciding.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "dimension": "Decision Driver",
+      "format": "scenario",
+      "text": "Your metrics look healthy — retention is up, NPS is high. But something feels off to you about the product direction. What do you do?",
+      "category": "Leading Indicators",
+      "options": [
+        {
+          "id": "a",
+          "text": "Trust the metrics. If numbers are healthy, the feeling is probably noise — stay the course.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Trust the feeling. Metrics are lagging indicators. Dig deeper into what's causing your instinct.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Go talk to users immediately — your instinct might be picking up something they're experiencing.",
+          "scores": {
+            "mirror": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Share the feeling with the team and see if others are picking up on the same signal.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "dimension": "Decision Driver",
+      "format": "scenario",
+      "text": "You have strong quantitative data supporting Feature A and a strong personal conviction about Feature B. Which do you choose?",
+      "category": "Prioritisation",
+      "options": [
+        {
+          "id": "a",
+          "text": "Feature A — data-backed decisions are more defensible and less risky than personal bets.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Feature B — you've seen enough to know when data doesn't capture the full picture.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Neither until you validate both with customers to see which problem is more acutely felt.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Present both to the team with your reasoning and make the call together.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "dimension": "Decision Driver",
+      "format": "scenario",
+      "text": "You are asked to make a product decision on the spot in a leadership meeting without time to review data. What do you do?",
+      "category": "On-the-Spot Decision",
+      "options": [
+        {
+          "id": "a",
+          "text": "Ask for 24 hours to pull the relevant data before committing to a direction.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Make the call confidently based on your knowledge and experience — you can always adjust later.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Share what you've heard from customers as the basis for your on-the-spot recommendation.",
+          "scores": {
+            "mirror": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Open the decision to the room — use collective intelligence rather than a solo call.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "dimension": "Decision Driver",
+      "format": "scenario",
+      "text": "Research shows users say they want Feature X. But your experience tells you what users say and what they do are very different. How do you proceed?",
+      "category": "User Research",
+      "options": [
+        {
+          "id": "a",
+          "text": "Run a behavioral experiment — measure what users actually do, not what they say they want.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Trust your experience. You know how to read between the lines of user feedback.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Do deeper qualitative research — observe users in context to see the real behavior.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Share the tension with the team and debate it before making a call.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "dimension": "Decision Driver",
+      "format": "scenario",
+      "text": "You have 3 months of strong growth data. A senior leader suggests it might be a seasonal spike, not real product-market fit. How do you respond?",
+      "category": "Interpreting Data",
+      "options": [
+        {
+          "id": "a",
+          "text": "Dig into the data — cohort analysis, retention curves, and channel breakdowns will reveal the truth.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Disagree with conviction — you've been watching user behavior closely and this feels real.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Talk to new users from this growth period to understand why they came and why they stayed.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Acknowledge the concern and propose a framework the whole leadership team can use to evaluate it.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "dimension": "Decision Driver",
+      "format": "scenario",
+      "text": "You are about to kill a feature based on low usage data. One passionate power user says removing it would make them churn. What do you do?",
+      "category": "Edge Cases",
+      "options": [
+        {
+          "id": "a",
+          "text": "Stick to the data — one user's preference cannot override aggregate usage signals.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Pause and investigate — a passionate user like this often represents a segment you're undervaluing.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Talk to them in depth — understand exactly how and why they use this feature before deciding.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Share the signal with the team — get multiple perspectives before making the final call.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "dimension": "Decision Driver",
+      "format": "scenario",
+      "text": "You are evaluating whether to enter a new market. You have incomplete data but a strong strategic conviction. What is your move?",
+      "category": "Market Expansion",
+      "options": [
+        {
+          "id": "a",
+          "text": "Commission proper market research before committing any resources to the new market.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Run a lean experiment in the new market with a small team and minimal investment to test conviction fast.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Talk to potential users in the new market before making any decision.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Build a cross-functional business case and evaluate it collectively with leadership.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "dimension": "Decision Driver",
+      "format": "scenario",
+      "text": "Your team is split 50/50 on which direction to take the product. Data supports both sides slightly. You need to break the deadlock.",
+      "category": "Breaking Deadlock",
+      "options": [
+        {
+          "id": "a",
+          "text": "Design a definitive experiment that will produce a clear data signal to resolve the tie.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Make the call yourself — someone has to decide, and you have enough context to choose.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Take both directions to users and let their reaction guide the decision.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Facilitate a structured debate until the team converges — force alignment before moving.",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "dimension": "Decision Driver",
+      "format": "scenario",
+      "text": "You are building a brand new product category where no benchmarks exist. How do you set your success metrics?",
+      "category": "Metrics Definition",
+      "options": [
+        {
+          "id": "a",
+          "text": "Define proxy metrics based on adjacent categories and refine them as you learn more.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Set bold, intuition-driven targets and adjust them based on what you observe after launch.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Define success through customer outcomes — if users are better off, you're succeeding.",
+          "scores": {
+            "mirror": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Co-create metrics with your team and key stakeholders so everyone has ownership over them.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "dimension": "Decision Driver",
+      "format": "scenario",
+      "text": "An influential stakeholder pushes back on your product decision with opinions but no data. How do you handle it?",
+      "category": "Stakeholder Management",
+      "options": [
+        {
+          "id": "a",
+          "text": "Respond with your own data — frame the conversation around evidence and move it there.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Acknowledge their opinion but hold your position — you have conviction and won't be moved without good reason.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Propose going to users together to let customer reality settle the disagreement.",
+          "scores": {
+            "mirror": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Find a way to incorporate their perspective — maintaining the relationship matters as much as being right.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "dimension": "Decision Driver",
+      "format": "scenario",
+      "text": "You get early access to a competitor's product before it launches. It looks impressive. How does this change your decision-making?",
+      "category": "Competitive Intelligence",
+      "options": [
+        {
+          "id": "a",
+          "text": "Quantify specifically how it compares to yours on key metrics before drawing any conclusions.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Trust your read — you know your market well enough to assess threat level quickly.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Show it to your best customers and ask them directly what they think.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Bring it to the team for a collective threat assessment before deciding how to respond.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "dimension": "Decision Driver",
+      "format": "scenario",
+      "text": "A data analyst presents findings that contradict your product thesis. The methodology seems sound. What is your reaction?",
+      "category": "Challenging Data",
+      "options": [
+        {
+          "id": "a",
+          "text": "Accept the findings and update your thesis — good data should always change your mind.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Probe the findings carefully — data can be technically correct but strategically misleading.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Pair the quantitative findings with qualitative user interviews before drawing conclusions.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Share the findings with the broader team and work through the implications together.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "dimension": "Decision Driver",
+      "format": "scenario",
+      "text": "You need to make a pricing decision but your market data is 18 months old. What do you do?",
+      "category": "Pricing",
+      "options": [
+        {
+          "id": "a",
+          "text": "Commission fresh pricing research before making any changes — outdated data is unreliable.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Use your judgment, set a price, and treat it as an experiment you can adjust quickly.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Talk to current customers about what they value and what price feels fair.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Bring sales, finance, and marketing into the room — pricing is a cross-functional decision.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "dimension": "Decision Driver",
+      "format": "forced_choice",
+      "text": "When a decision must be made and data is limited, you:",
+      "category": "Decision Under Ambiguity",
+      "options": [
+        {
+          "id": "a",
+          "text": "Wait and gather more data even if it delays the decision.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Make the call and own the outcome — inaction is the worst option.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Quickly run a lightweight user test to get directional signal.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Pull the team together and make a collective judgment call.",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "dimension": "Decision Driver",
+      "format": "forced_choice",
+      "text": "You trust most in:",
+      "category": "Trust Source",
+      "options": [
+        {
+          "id": "a",
+          "text": "Statistically significant data from well-designed experiments.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Your pattern recognition built from years of experience.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "What users tell you and show you when you observe them closely.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "The collective intelligence of a well-aligned, experienced team.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "dimension": "Decision Driver",
+      "format": "forced_choice",
+      "text": "The phrase that best describes your decision-making is:",
+      "category": "Decision Mantra",
+      "options": [
+        {
+          "id": "a",
+          "text": "'Show me the data.'",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "'I know what needs to be done.'",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "'Let's ask a user.'",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "'What does the team think?'",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "dimension": "Decision Driver",
+      "format": "forced_choice",
+      "text": "Your biggest risk as a PM is probably:",
+      "category": "Self-awareness",
+      "options": [
+        {
+          "id": "a",
+          "text": "Analysis paralysis — spending too long seeking certainty before acting.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Overconfidence — trusting your gut when the data says otherwise.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Over-indexing on individual user feedback at the expense of aggregate signals.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Consensus-seeking — taking too long to get buy-in before moving.",
+          "scores": {
+            "herald": 2,
+            "anchor": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "dimension": "Decision Driver",
+      "format": "forced_choice",
+      "text": "The metric you track most obsessively is:",
+      "category": "Metrics Obsession",
+      "options": [
+        {
+          "id": "a",
+          "text": "Retention or engagement cohorts — they tell the real story of product health.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Revenue or growth — those prove the product is truly working.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "NPS or CSAT — customer sentiment is the leading indicator I care about most.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Team velocity and shipping cadence — healthy teams build healthy products.",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "dimension": "Decision Driver",
+      "format": "forced_choice",
+      "text": "When onboarding to a new product area, the first thing you do is:",
+      "category": "Onboarding Style",
+      "options": [
+        {
+          "id": "a",
+          "text": "Audit all available data — funnels, retention, engagement, support tickets.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Form your own hypothesis about what is broken before looking at anyone else's opinions.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Schedule 10 user interviews in the first 2 weeks.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Map all the stakeholders and understand their perspectives on the product.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 47,
+      "dimension": "Decision Driver",
+      "format": "forced_choice",
+      "text": "When you are wrong about a product decision, it is usually because:",
+      "category": "Failure Mode",
+      "options": [
+        {
+          "id": "a",
+          "text": "I over-relied on data that didn't capture the full human context.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "I was too confident and didn't seek enough outside perspective.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "I listened too closely to vocal users and missed the silent majority.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "I prioritized harmony and didn't push back hard enough on a flawed consensus.",
+          "scores": {
+            "herald": 2,
+            "anchor": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 48,
+      "dimension": "Decision Driver",
+      "format": "slider",
+      "text": "I feel uncomfortable making product decisions without statistically significant data to support them.",
+      "category": "Data Dependency",
+      "scale_low": "Strongly Disagree",
+      "scale_high": "Strongly Agree",
+      "low_maps_to": "anchor",
+      "high_maps_to": "compass"
+    },
+    {
+      "id": 49,
+      "dimension": "Decision Driver",
+      "format": "slider",
+      "text": "I have made product calls that went against the data and turned out to be correct.",
+      "category": "Intuition Track Record",
+      "scale_low": "Strongly Disagree",
+      "scale_high": "Strongly Agree",
+      "low_maps_to": "compass",
+      "high_maps_to": "anchor"
+    },
+    {
+      "id": 50,
+      "dimension": "Decision Driver",
+      "format": "slider",
+      "text": "A strong product intuition built from experience is as valuable as a rigorous data practice.",
+      "category": "Intuition vs. Data",
+      "scale_low": "Strongly Disagree",
+      "scale_high": "Strongly Agree",
+      "low_maps_to": "compass",
+      "high_maps_to": "anchor"
+    },
+
+
+
+
+    {
+      "id": 51,
+      "dimension": "Work Mode",
+      "format": "scenario",
+      "text": "You strongly disagree with a product decision that has already been made by leadership. What do you do?",
+      "category": "Disagreement",
+      "options": [
+        {
+          "id": "a",
+          "text": "Raise your concern clearly with data and reasoning, then commit fully once the decision stands.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Push back hard and continue escalating until you are heard — bad decisions need to be reversed.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Understand the user impact of the decision and use that to reframe your concern.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Find common ground — understand leadership's reasoning and try to synthesize both perspectives.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 52,
+      "dimension": "Work Mode",
+      "format": "scenario",
+      "text": "You need a decision from a partner team but they are unresponsive and blocking your progress. What do you do?",
+      "category": "Cross-functional Blocker",
+      "options": [
+        {
+          "id": "a",
+          "text": "Document the blocker, escalate it through the right channels with data on the impact.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Make the decision yourself and move forward — you can't let others slow you down.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Understand why they are unresponsive — maybe there's a user or business concern you can address.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Invest time in the relationship — get on a call and work through it together.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 53,
+      "dimension": "Work Mode",
+      "format": "scenario",
+      "text": "Your engineering lead proposes a technical approach you think is wrong. How do you handle it?",
+      "category": "Technical Disagreement",
+      "options": [
+        {
+          "id": "a",
+          "text": "Bring data and specific examples to the conversation to make your case clearly.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Push back directly and make your position clear — you have an informed view and it matters.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Ask how the approach will affect the user experience before taking a position.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Facilitate a discussion between engineering and design to explore alternatives together.",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 54,
+      "dimension": "Work Mode",
+      "format": "scenario",
+      "text": "You have a 2-week window to explore a new product opportunity with no guidance. How do you structure your time?",
+      "category": "Unstructured Time",
+      "options": [
+        {
+          "id": "a",
+          "text": "Define a clear hypothesis, design experiments to test it, and analyze results.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Work independently and intensely — you produce your best thinking without external input.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Spend most of the time with users — the opportunity will emerge from listening.",
+          "scores": {
+            "mirror": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Bring together a small cross-functional group and explore the opportunity collaboratively.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 55,
+      "dimension": "Work Mode",
+      "format": "scenario",
+      "text": "A critical feature needs to ship in 3 days. You can work through the weekend alone or wait to loop in 3 more stakeholders on Monday. What do you do?",
+      "category": "Speed vs. Alignment",
+      "options": [
+        {
+          "id": "a",
+          "text": "Work through the weekend with clear documentation so stakeholders can review async.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Ship it — speed matters more than perfect alignment, and you'll deal with feedback after.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Assess user impact — if users are affected negatively by waiting, ship solo. If not, wait.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Do a quick 30-minute async update to key stakeholders on Friday and get fast approval.",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 56,
+      "dimension": "Work Mode",
+      "format": "scenario",
+      "text": "Your product requires input from 5 teams to move forward. Two of them are slow to respond. What is your approach?",
+      "category": "Dependency Management",
+      "options": [
+        {
+          "id": "a",
+          "text": "Map the dependencies, identify which are truly blocking, and only escalate those.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Scope around the slow teams — find a version of the solution that doesn't need them.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Understand what would make these teams more responsive — maybe there's a shared user goal.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Invest in building a better working relationship with both teams before the next dependency.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 57,
+      "dimension": "Work Mode",
+      "format": "scenario",
+      "text": "You are leading a product planning session and the team cannot reach a decision. What do you do?",
+      "category": "Facilitation",
+      "options": [
+        {
+          "id": "a",
+          "text": "Propose using a clear decision framework and work through it together systematically.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Make the call as the DRI — that's why you're in the room. Decide and move on.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Redirect to the user — frame every option around 'which one serves our users better?'",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Keep facilitating until the group genuinely aligns — a forced decision without buy-in won't stick.",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 58,
+      "dimension": "Work Mode",
+      "format": "scenario",
+      "text": "You are given ownership of a new product area with a team of 8 people you've never worked with. What is your first week like?",
+      "category": "New Team",
+      "options": [
+        {
+          "id": "a",
+          "text": "Review all existing data, docs, and metrics before meeting anyone.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Quickly establish your working style, expectations, and decision-making authority with the team.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Start with user research — understand the customer before anything else.",
+          "scores": {
+            "mirror": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Have 1:1s with every team member to understand their perspectives and build trust.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 59,
+      "dimension": "Work Mode",
+      "format": "scenario",
+      "text": "You believe a feature should be cut from the roadmap. Your design lead has invested 3 weeks in it and is emotionally attached. What do you do?",
+      "category": "Difficult Cuts",
+      "options": [
+        {
+          "id": "a",
+          "text": "Show data that supports cutting it and make the case calmly and clearly.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Make the call — a PM who avoids hard decisions out of emotional sensitivity isn't serving the product.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Anchor the conversation on the user — frame it as 'what is best for the person using this?'",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Have a private conversation with the design lead first to understand their perspective and find shared ground.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 60,
+      "dimension": "Work Mode",
+      "format": "scenario",
+      "text": "You have just joined a company where everything requires 6 approvals. How do you adapt?",
+      "category": "Bureaucracy",
+      "options": [
+        {
+          "id": "a",
+          "text": "Map the approval process, find where decisions bottleneck, and propose improvements with evidence.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Find the edges of your autonomy and operate at maximum independence within them.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Use customer outcomes as the shared language that speeds up alignment across approvers.",
+          "scores": {
+            "mirror": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Embrace it — build relationships with all 6 approvers so the process becomes faster naturally.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 61,
+      "dimension": "Work Mode",
+      "format": "scenario",
+      "text": "A cross-functional partner openly disagrees with your roadmap in a public meeting. How do you handle it in the moment?",
+      "category": "Public Conflict",
+      "options": [
+        {
+          "id": "a",
+          "text": "Acknowledge their point, propose discussing it offline with data in hand, and move on.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Defend your position clearly and confidently — public challenges deserve public responses.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Redirect to user impact — frame the disagreement around what matters most to customers.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Thank them for raising it, invite their input, and commit to following up together.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 62,
+      "dimension": "Work Mode",
+      "format": "scenario",
+      "text": "You are most productive when:",
+      "category": "Productivity",
+      "options": [
+        {
+          "id": "a",
+          "text": "You have clear goals, clean data, and time to think without interruptions.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "You have full ownership and the freedom to move fast without approval chains.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "You are deeply embedded with users and can test ideas quickly with them.",
+          "scores": {
+            "mirror": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "You are working in a high-trust team where everyone is aligned and communicating openly.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 63,
+      "dimension": "Work Mode",
+      "format": "scenario",
+      "text": "A new PM asks you what skill they should prioritize developing. What do you tell them?",
+      "category": "PM Advice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Learn to think in data — build a quantitative intuition for what metrics actually mean.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Develop ownership — act like a founder, not a feature manager.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Get close to users — the best PMs are the ones who understand people most deeply.",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Learn to align people — building trust across functions is how things actually get done.",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 64,
+      "dimension": "Work Mode",
+      "format": "scenario",
+      "text": "Your company introduces a policy that limits your autonomy as a PM — more approvals are now required. Your reaction is:",
+      "category": "Autonomy",
+      "options": [
+        {
+          "id": "a",
+          "text": "Adapt — build the data practices that make your approvals faster and more defensible.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Push back — excess process is a tax on shipping, and you'll advocate for removing it.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Assess whether the policy protects or harms the user experience, then form a view.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Try to understand why the policy was introduced — maybe it's solving a real problem.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 65,
+      "dimension": "Work Mode",
+      "format": "scenario",
+      "text": "You are presenting a roadmap to 10 senior stakeholders with very different priorities. How do you prepare?",
+      "category": "Roadmap Presentation",
+      "options": [
+        {
+          "id": "a",
+          "text": "Build a data-backed narrative that objectively shows why each roadmap item was chosen.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Present your conviction clearly — you've done the work, you know what's right, and you'll defend it.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Anchor every roadmap item to a specific user problem — let user needs be the common ground.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Pre-socialize the roadmap with each stakeholder individually before the big meeting.",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 66,
+      "dimension": "Work Mode",
+      "format": "forced_choice",
+      "text": "Your ideal working environment is:",
+      "category": "Work Environment",
+      "options": [
+        {
+          "id": "a",
+          "text": "Structured, data-rich, with clear goals and measurable outputs.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Autonomous, fast-paced, with minimal bureaucracy and maximum ownership.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "User-centric, with constant access to customers and rapid feedback loops.",
+          "scores": {
+            "mirror": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Collaborative, high-trust, with open communication and shared ownership.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 67,
+      "dimension": "Work Mode",
+      "format": "forced_choice",
+      "text": "The thing that slows you down most as a PM is:",
+      "category": "Friction Points",
+      "options": [
+        {
+          "id": "a",
+          "text": "Not having the right data to make confident decisions.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Needing too many approvals before you can move.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Not having enough access to real users.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Misalignment between teams that creates rework.",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 68,
+      "dimension": "Work Mode",
+      "format": "forced_choice",
+      "text": "When you ship a product that fails, your first instinct is to:",
+      "category": "Failure Response",
+      "options": [
+        {
+          "id": "a",
+          "text": "Analyze the data thoroughly to understand exactly what went wrong.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Own it fully, course-correct fast, and move forward without dwelling.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Go back to users immediately to understand how they experienced the failure.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Run a team retrospective so everyone learns and the team stays aligned.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 69,
+      "dimension": "Work Mode",
+      "format": "forced_choice",
+      "text": "The PM superpower you are most proud of is:",
+      "category": "Strengths",
+      "options": [
+        {
+          "id": "a",
+          "text": "Turning ambiguous problems into clear, measurable hypotheses.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Making hard calls quickly and owning the outcome completely.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Building a deep, almost uncanny understanding of your users.",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Making every team feel like the product is theirs too.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 70,
+      "dimension": "Work Mode",
+      "format": "forced_choice",
+      "text": "On a Friday afternoon with no meetings, you instinctively spend your time:",
+      "category": "Discretionary Time",
+      "options": [
+        {
+          "id": "a",
+          "text": "Reviewing dashboards, reading research, and building your knowledge base.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Moving something forward that has been blocked all week — solo, uninterrupted.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Scheduling user interviews for next week or reviewing recorded sessions.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Catching up with teammates to strengthen relationships and check on morale.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 71,
+      "dimension": "Work Mode",
+      "format": "forced_choice",
+      "text": "The meeting format you find most valuable is:",
+      "category": "Meeting Preference",
+      "options": [
+        {
+          "id": "a",
+          "text": "A focused data review with clear takeaways and actions.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "A working session where decisions get made on the spot.",
+          "scores": {
+            "anchor": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "A customer listening session or user research share-out.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "A cross-functional sync that builds shared understanding and alignment.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 72,
+      "dimension": "Work Mode",
+      "format": "forced_choice",
+      "text": "Your team is performing well. What do you credit most?",
+      "category": "Team Success",
+      "options": [
+        {
+          "id": "a",
+          "text": "Clear goals, good instrumentation, and disciplined prioritization.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Strong ownership culture — everyone acts like a founder of their area.",
+          "scores": {
+            "anchor": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Deep customer empathy baked into every decision the team makes.",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Psychological safety and open communication across all functions.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 73,
+      "dimension": "Work Mode",
+      "format": "slider",
+      "text": "I prefer to make important product decisions independently rather than seeking team consensus first.",
+      "category": "Independence",
+      "scale_low": "Strongly Disagree",
+      "scale_high": "Strongly Agree",
+      "low_maps_to": "herald",
+      "high_maps_to": "anchor"
+    },
+    {
+      "id": 74,
+      "dimension": "Work Mode",
+      "format": "slider",
+      "text": "I find deep satisfaction in building alignment across teams, even when it takes longer than deciding alone.",
+      "category": "Collaboration Satisfaction",
+      "scale_low": "Strongly Disagree",
+      "scale_high": "Strongly Agree",
+      "low_maps_to": "anchor",
+      "high_maps_to": "herald"
+    },
+    {
+      "id": 75,
+      "dimension": "Work Mode",
+      "format": "slider",
+      "text": "I am energized by having full ownership and accountability over a product, even if it means carrying more risk.",
+      "category": "Ownership Drive",
+      "scale_low": "Strongly Disagree",
+      "scale_high": "Strongly Agree",
+      "low_maps_to": "herald",
+      "high_maps_to": "anchor"
+    },
+
+
+
+
+    {
+      "id": 76,
+      "dimension": "Focus Area",
+      "format": "scenario",
+      "text": "You have one sprint left in the quarter. You can ship a feature that will delight users but has no direct revenue impact, or one that increases revenue by 8% but users find slightly annoying. What do you ship?",
+      "category": "User vs. Business",
+      "options": [
+        {
+          "id": "a",
+          "text": "The user delight feature — long-term retention is worth more than short-term revenue.",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "The revenue feature — an 8% lift is a concrete, defensible business outcome.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Neither — go back and find a solution that achieves both, even if it takes longer.",
+          "scores": {
+            "seer": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Consult the team and key stakeholders — this is a values call that shouldn't be made alone.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 77,
+      "dimension": "Focus Area",
+      "format": "scenario",
+      "text": "Your NPS drops by 10 points in one month but all business metrics remain flat. What do you do?",
+      "category": "Sentiment vs. Metrics",
+      "options": [
+        {
+          "id": "a",
+          "text": "Treat it as a critical signal — NPS drops are a leading indicator of churn and you act immediately.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Monitor it but don't panic — business metrics are stable, so this may be noise.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Investigate the cause deeply before deciding how much urgency to assign.",
+          "scores": {
+            "seer": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Share it transparently with the team and decide together how much weight to give it.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 78,
+      "dimension": "Focus Area",
+      "format": "scenario",
+      "text": "A user writes an emotional support ticket saying your product change made their daily work significantly harder. What is your response?",
+      "category": "Individual User Signal",
+      "options": [
+        {
+          "id": "a",
+          "text": "Personally read the ticket and immediately flag it internally — one user's pain is a signal.",
+          "scores": {
+            "mirror": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Route it to support and check the aggregate support volume data before escalating.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Use it as an input to re-evaluate the change's broader strategic impact.",
+          "scores": {
+            "seer": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Escalate it to the relevant team and ensure someone owns the response.",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 79,
+      "dimension": "Focus Area",
+      "format": "scenario",
+      "text": "A product decision will increase DAU by 15% but the experience feels manipulative to you. Do you ship it?",
+      "category": "Ethics vs. Metrics",
+      "options": [
+        {
+          "id": "a",
+          "text": "No — user trust is more valuable than any short-term metric gain.",
+          "scores": {
+            "mirror": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Yes — 15% DAU growth is a significant business outcome and the market decides what's manipulative.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Redesign it — there's a way to get the metric impact without the manipulative feel.",
+          "scores": {
+            "seer": 2,
+            "mirror": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Bring it to leadership for a values discussion — this decision shouldn't sit with one person.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 80,
+      "dimension": "Focus Area",
+      "format": "scenario",
+      "text": "Your product has power users who drive 80% of revenue and casual users who make up 80% of volume. Your roadmap must prioritize one. Which do you choose?",
+      "category": "Segmentation",
+      "options": [
+        {
+          "id": "a",
+          "text": "Casual users — the larger segment is where the long-term growth potential lies.",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Power users — they drive the revenue that keeps the product alive.",
+          "scores": {
+            "compass": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Find the overlap — what would serve both segments and generate outsized returns?",
+          "scores": {
+            "seer": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Align with leadership and sales on which segment is strategically more important.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 81,
+      "dimension": "Focus Area",
+      "format": "scenario",
+      "text": "Finance asks you to add a feature that will make monetization more aggressive but you know it will frustrate users. How do you respond?",
+      "category": "Monetization Pressure",
+      "options": [
+        {
+          "id": "a",
+          "text": "Push back with user data showing the long-term risk to retention and LTV.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Find a monetization approach that meets the revenue goal with minimal user friction.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Propose a bigger, bolder monetization strategy that doesn't require compromising the experience.",
+          "scores": {
+            "seer": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Bring finance, marketing, and product together to find a solution everyone can live with.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 82,
+      "dimension": "Focus Area",
+      "format": "scenario",
+      "text": "You are defining success metrics for a new feature. Which metric do you weight most heavily?",
+      "category": "Success Metrics",
+      "options": [
+        {
+          "id": "a",
+          "text": "User satisfaction score (CSAT/NPS) — the user's experience is the ultimate signal.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Revenue or conversion impact — that's the metric the business actually cares about.",
+          "scores": {
+            "compass": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Strategic positioning — does it help us win the market or build a defensible advantage?",
+          "scores": {
+            "seer": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Team adoption — metrics are meaningless if the team doesn't trust and use them.",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 83,
+      "dimension": "Focus Area",
+      "format": "scenario",
+      "text": "Churn spikes suddenly. You have two hypotheses: UX issue or pricing issue. You can only investigate one this week. Which do you choose?",
+      "category": "Churn Investigation",
+      "options": [
+        {
+          "id": "a",
+          "text": "UX issue — if users are struggling, that's a more urgent problem to fix.",
+          "scores": {
+            "mirror": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Pricing — if pricing is wrong, no UX improvement will fix the churn.",
+          "scores": {
+            "compass": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Neither alone — design a lightweight study that tests both hypotheses simultaneously.",
+          "scores": {
+            "seer": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Ask the team — someone else may have already seen signal on one of these hypotheses.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 84,
+      "dimension": "Focus Area",
+      "format": "scenario",
+      "text": "A user segment that loves your product has very low monetization potential. A segment with high monetization potential finds your product just okay. Where do you focus?",
+      "category": "Love vs. Revenue",
+      "options": [
+        {
+          "id": "a",
+          "text": "Double down on the segment that loves it — build on that love to unlock their referral power.",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Focus on the high monetization segment — love doesn't pay the bills.",
+          "scores": {
+            "compass": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Find product changes that would make the high-monetization segment love the product too.",
+          "scores": {
+            "seer": 2,
+            "mirror": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Align with leadership on company strategy before committing to one segment.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 85,
+      "dimension": "Focus Area",
+      "format": "scenario",
+      "text": "Your product's activation rate is low. You can simplify onboarding (better UX) or add a paywall earlier (better business). Which do you prioritize?",
+      "category": "Activation Strategy",
+      "options": [
+        {
+          "id": "a",
+          "text": "Simplify onboarding — users who don't activate never become paying customers anyway.",
+          "scores": {
+            "mirror": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Add the paywall — it filters for serious users and improves the business model.",
+          "scores": {
+            "compass": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Redesign the entire onboarding to deliver value so fast that the paywall becomes natural.",
+          "scores": {
+            "seer": 2,
+            "mirror": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Run both as parallel experiments and let the data decide.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 86,
+      "dimension": "Focus Area",
+      "format": "scenario",
+      "text": "A feature your team is proud of is used by only 3% of users despite being prominently placed. What do you do?",
+      "category": "Low Usage Feature",
+      "options": [
+        {
+          "id": "a",
+          "text": "Talk to the 3% who use it to understand why and whether it's deeply valuable to them.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Kill or deprioritize it — 3% usage is a resource drain that can't be justified.",
+          "scores": {
+            "compass": 2,
+            "forge": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Investigate whether the feature is solving the right problem — maybe it needs to be reimagined.",
+          "scores": {
+            "seer": 2,
+            "mirror": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Present the data to the team and make the cut/keep decision together.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 87,
+      "dimension": "Focus Area",
+      "format": "scenario",
+      "text": "You are writing your annual product strategy. The first principle you write is:",
+      "category": "Product Principles",
+      "options": [
+        {
+          "id": "a",
+          "text": "'Users first — every decision starts with understanding the human problem behind it.'",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "'Business outcomes are the measure of our success — we build what moves the numbers that matter.'",
+          "scores": {
+            "compass": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "'We build for the future — we solve problems users don't know they have yet.'",
+          "scores": {
+            "seer": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "'We win together — great products are built by aligned, empowered teams.'",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 88,
+      "dimension": "Focus Area",
+      "format": "scenario",
+      "text": "The executive team wants to add a feature that users have not asked for but has strong revenue potential. What is your position?",
+      "category": "Executive Pressure",
+      "options": [
+        {
+          "id": "a",
+          "text": "Validate it with users first — if they don't need it, the revenue potential is speculative.",
+          "scores": {
+            "mirror": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Build a proper business case and if the numbers hold, ship it — revenue is a valid product signal.",
+          "scores": {
+            "compass": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Explore whether there is a version of this feature that creates genuine user value and drives revenue.",
+          "scores": {
+            "seer": 2,
+            "mirror": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Facilitate a structured discussion with the executive team to align on priorities before committing.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 89,
+      "dimension": "Focus Area",
+      "format": "scenario",
+      "text": "Your product has a power user who generates 50% of support tickets but also represents your most engaged segment. How do you think about them?",
+      "category": "Power Users",
+      "options": [
+        {
+          "id": "a",
+          "text": "Invest heavily in them — engaged users who push you hard are your best product partners.",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Assess their business value carefully — support cost has to be weighed against LTV.",
+          "scores": {
+            "compass": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Use their feedback to imagine what the product needs to become — they're showing you the future.",
+          "scores": {
+            "seer": 2,
+            "mirror": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Bring support, success, and product together to build a shared strategy for this segment.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 90,
+      "dimension": "Focus Area",
+      "format": "scenario",
+      "text": "You choose between two OKRs: 'Improve user satisfaction score by 15%' vs 'Increase revenue per user by 20%'. Which do you fight for?",
+      "category": "OKR Choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "User satisfaction — it is the driver of everything else, including revenue.",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Revenue per user — that demonstrates real product-market fit and business health.",
+          "scores": {
+            "compass": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Reframe both into a single OKR that captures the relationship between satisfaction and revenue.",
+          "scores": {
+            "seer": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Align with the leadership team on which one matters most to the company right now.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 91,
+      "dimension": "Focus Area",
+      "format": "forced_choice",
+      "text": "The question you ask most often in a product review is:",
+      "category": "Review Lens",
+      "options": [
+        {
+          "id": "a",
+          "text": "'How does this make the user's life better?'",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "'What is the expected business impact?'",
+          "scores": {
+            "compass": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "'Does this move us closer to our long-term vision?'",
+          "scores": {
+            "seer": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "'Does everyone on the team understand why we're building this?'",
+          "scores": {
+            "herald": 2,
+            "forge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 92,
+      "dimension": "Focus Area",
+      "format": "forced_choice",
+      "text": "The product failure that would upset you most is:",
+      "category": "Failure Sensitivity",
+      "options": [
+        {
+          "id": "a",
+          "text": "Shipping something that made users' lives worse, even if it hit business metrics.",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Shipping something beloved by users but that destroyed the business model.",
+          "scores": {
+            "compass": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Shipping something tactically successful but strategically irrelevant.",
+          "scores": {
+            "seer": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Shipping something that fractured the team or broke cross-functional trust.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 93,
+      "dimension": "Focus Area",
+      "format": "forced_choice",
+      "text": "When you read a product case study, you pay most attention to:",
+      "category": "Learning Style",
+      "options": [
+        {
+          "id": "a",
+          "text": "How the team understood and empathized with their users.",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "The business model decisions and how revenue grew.",
+          "scores": {
+            "compass": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "The strategic bets that defined the product's long-term direction.",
+          "scores": {
+            "seer": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "How the team collaborated and what their culture was like.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 94,
+      "dimension": "Focus Area",
+      "format": "forced_choice",
+      "text": "If your product gets a glowing user review but misses its revenue target, you feel:",
+      "category": "Success Definition",
+      "options": [
+        {
+          "id": "a",
+          "text": "Proud — user love is the foundation. Revenue will follow.",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Concerned — a missed revenue target is a missed product target, regardless of sentiment.",
+          "scores": {
+            "compass": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Curious — something in the strategy is misaligned and you want to find and fix it.",
+          "scores": {
+            "seer": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Mixed — you want to understand how the team feels and align on what to do next.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 95,
+      "dimension": "Focus Area",
+      "format": "forced_choice",
+      "text": "Your product is described by users as 'essential' but your CFO says it's 'undermonetized'. Who do you agree with more?",
+      "category": "Value Tension",
+      "options": [
+        {
+          "id": "a",
+          "text": "'Essential' is the highest compliment a product can receive — protect it above all else.",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "'Undermonetized' is a real problem — essential products that don't capture value won't survive.",
+          "scores": {
+            "compass": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Both are true and together they point to a massive strategic opportunity.",
+          "scores": {
+            "seer": 2,
+            "compass": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "This tension needs a leadership conversation — it reflects a values misalignment in the company.",
+          "scores": {
+            "herald": 2,
+            "compass": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 96,
+      "dimension": "Focus Area",
+      "format": "forced_choice",
+      "text": "You would describe your relationship with users as:",
+      "category": "User Relationship",
+      "options": [
+        {
+          "id": "a",
+          "text": "Their advocate — I represent them in every room they are not in.",
+          "scores": {
+            "mirror": 2,
+            "herald": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Their value provider — I measure success by the outcomes they help us achieve.",
+          "scores": {
+            "compass": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Their guide — I show them possibilities they didn't know existed.",
+          "scores": {
+            "seer": 2,
+            "mirror": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Their collaborator — the best products are built with users, not just for them.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 97,
+      "dimension": "Focus Area",
+      "format": "forced_choice",
+      "text": "The PM book or resource you would recommend to everyone is most likely about:",
+      "category": "Learning Preference",
+      "options": [
+        {
+          "id": "a",
+          "text": "Customer empathy, user research, and understanding human behavior.",
+          "scores": {
+            "mirror": 2,
+            "seer": 1
+          }
+        },
+        {
+          "id": "b",
+          "text": "Business strategy, growth, and metrics-driven product development.",
+          "scores": {
+            "compass": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text": "Vision, innovation, and building category-defining products.",
+          "scores": {
+            "seer": 2,
+            "anchor": 1
+          }
+        },
+        {
+          "id": "d",
+          "text": "Team dynamics, influence without authority, and cross-functional leadership.",
+          "scores": {
+            "herald": 2,
+            "mirror": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 98,
+      "dimension": "Focus Area",
+      "format": "slider",
+      "text": "I believe that building something users genuinely love always leads to better business outcomes in the long run.",
+      "category": "User Love Belief",
+      "scale_low": "Strongly Disagree",
+      "scale_high": "Strongly Agree",
+      "low_maps_to": "compass",
+      "high_maps_to": "mirror"
+    },
+    {
+      "id": 99,
+      "dimension": "Focus Area",
+      "format": "slider",
+      "text": "When a product decision comes down to user experience vs. business metrics, I default to the one that moves the business metrics.",
+      "category": "Default Priority",
+      "scale_low": "Strongly Disagree",
+      "scale_high": "Strongly Agree",
+      "low_maps_to": "mirror",
+      "high_maps_to": "compass"
+    },
+    {
+      "id": 100,
+      "dimension": "Focus Area",
+      "format": "slider",
+      "text": "I feel more accountable to my users than to my company's revenue targets.",
+      "category": "Accountability",
+      "scale_low": "Strongly Disagree",
+      "scale_high": "Strongly Agree",
+      "low_maps_to": "compass",
+      "high_maps_to": "mirror"
+    }
+  ]
+}
