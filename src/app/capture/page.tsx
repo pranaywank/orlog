@@ -13,7 +13,9 @@ const typeDisplayNames: Record<string, string> = {
     anchor: "The Sovereign",
 };
 
-export default function CapturePage() {
+export const dynamic = 'force-dynamic'; // Prevent static prerendering issues
+
+function CaptureContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -174,7 +176,6 @@ export default function CapturePage() {
                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
-                                Saving...
                             </span>
                         ) : (
                             <span className="flex items-center gap-2">
@@ -186,5 +187,19 @@ export default function CapturePage() {
                 </form>
             </div>
         </div>
+    );
+}
+
+import { Suspense } from 'react';
+
+export default function CapturePage() {
+    return (
+        <Suspense fallback={
+            <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-black"></div>
+            </div>
+        }>
+            <CaptureContent />
+        </Suspense>
     );
 }
