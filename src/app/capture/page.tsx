@@ -3,15 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-
-const typeDisplayNames: Record<string, string> = {
-    seer: "The Seer",
-    forge: "The Forge",
-    mirror: "The Warden",
-    compass: "The Sage",
-    herald: "The Weaver",
-    anchor: "The Sovereign",
-};
+import { PM_TYPES } from "@/constants/types";
 
 export const dynamic = 'force-dynamic'; // Prevent static prerendering issues
 
@@ -27,16 +19,15 @@ function CaptureContent() {
     const [secondaryType, setSecondaryType] = useState<string | null>(null);
     const [hybridName, setHybridName] = useState<string | null>(null);
     const [dimensionScores, setDimensionScores] = useState<any>(null);
-    const [isInitializing, setIsInitializing] = useState(true);
 
     // Validate presence of required URL parameters
     useEffect(() => {
         const primary = searchParams.get("primary");
         const secondary = searchParams.get("secondary");
         const hybrid = searchParams.get("hybrid");
-        const scoresParam = searchParams.get("scores");
+        const scores = searchParams.get("scores");
 
-        if (!primary || !secondary || !hybrid) {
+        if (!primary || !secondary) {
             // Redirect to test if no results are found in URL
             router.push("/test");
             return;
@@ -44,17 +35,15 @@ function CaptureContent() {
 
         setPrimaryType(primary);
         setSecondaryType(secondary);
-        setHybridName(hybrid);
+        setHybridName(hybrid || "The Enigma");
 
-        if (scoresParam) {
+        if (scores) {
             try {
-                setDimensionScores(JSON.parse(scoresParam));
+                setDimensionScores(JSON.parse(scores));
             } catch (e) {
                 console.error("Failed to parse dimension scores", e);
             }
         }
-
-        setIsInitializing(false);
     }, [router, searchParams]);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -62,8 +51,8 @@ function CaptureContent() {
         setError(null);
 
         // Basic Validation
-        if (!name.trim()) {
-            setError("Please enter your name.");
+        if (!name.trim() || !email.trim()) {
+            setError("Please fill in all fields.");
             return;
         }
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -97,7 +86,7 @@ function CaptureContent() {
 
             // Success
             if (data && data.length > 0) {
-                router.push(`/result/${data[0].id}`);
+                router.push(`/ result / ${data[0].id} `);
             } else {
                 throw new Error("Failed to retrieve session ID.");
             }
@@ -108,21 +97,34 @@ function CaptureContent() {
     };
 
     // Prevent flash of content before redirecting if missing params
-    if (isInitializing) {
+    if (!primaryType || !secondaryType) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-zinc-50">
-                <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-300 border-t-black"></div>
+            <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans selection:bg-black selection:text-white">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-black"></div>
             </div>
         );
     }
 
+    const primaryData = PM_TYPES[primaryType as keyof typeof PM_TYPES];
+    const secondaryData = PM_TYPES[secondaryType as keyof typeof PM_TYPES];
+
+    const primaryTitle = primaryData ? `${primaryData.name} — ${primaryData.subtitle} ` : `The ${primaryType} `;
+    const secondaryTitle = secondaryData ? `${secondaryData.name} — ${secondaryData.subtitle} ` : `The ${secondaryType} `;
+
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-50 px-6 py-12 font-sans selection:bg-black selection:text-white">
-            <div className="w-full max-w-md bg-white p-8 sm:p-10 rounded-3xl shadow-sm border border-zinc-200 animate-in fade-in zoom-in-95 duration-500 fill-mode-both">
+        <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans selection:bg-black selection:text-white px-6 py-12">
+            <div className="w-full max-w-lg bg-white p-8 sm:p-12 rounded-3xl shadow-sm border border-zinc-200 animate-in fade-in zoom-in-95 duration-500 text-center">
+                <div className="mb-8">
+                    <p className="text-sm font-semibold tracking-widest text-zinc-400 uppercase mb-3">Your Result</p>
+                    <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-black mb-3">{primaryTitle}</h1>
+                    <p className="text-base sm:text-lg text-zinc-500 font-medium leading-relaxed">
+                        with traits of <span className="text-zinc-700">{secondaryTitle}</span>
+                    </p>
+                </div>
                 <div className="text-center mb-10">
-                    <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-black mb-3">
+                    <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-black mb-3">
                         One last step before your results
-                    </h1>
+                    </h2>
                     <p className="text-zinc-500 text-sm sm:text-base leading-relaxed">
                         We'll use this to personalize your results.
                     </p>

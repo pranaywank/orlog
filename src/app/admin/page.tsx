@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { PM_TYPES } from "@/constants/types";
 
 interface SessionData {
     id: string;
@@ -146,18 +147,26 @@ export default function AdminPage() {
                                             </td>
                                         </tr>
                                     ) : (
-                                        sessions.map((session) => (
-                                            <tr key={session.id} className="hover:bg-zinc-50/50 transition-colors">
-                                                <td className="px-6 py-4 whitespace-nowrap text-zinc-500">
-                                                    {new Date(session.created_at).toLocaleString()}
-                                                </td>
-                                                <td className="px-6 py-4 font-medium text-black">{session.name}</td>
-                                                <td className="px-6 py-4 text-zinc-600">{session.email}</td>
-                                                <td className="px-6 py-4 text-zinc-800 capitalize">{session.primary_type}</td>
-                                                <td className="px-6 py-4 text-zinc-800 capitalize">{session.secondary_type}</td>
-                                                <td className="px-6 py-4 font-medium text-black">{session.hybrid_name}</td>
-                                            </tr>
-                                        ))
+                                        sessions.map((session) => {
+                                            const primaryData = PM_TYPES[session.primary_type as keyof typeof PM_TYPES];
+                                            const secondaryData = PM_TYPES[session.secondary_type as keyof typeof PM_TYPES];
+                                            return (
+                                                <tr key={session.id} className="hover:bg-zinc-50/50 transition-colors">
+                                                    <td className="px-6 py-4 whitespace-nowrap text-zinc-500">
+                                                        {new Date(session.created_at).toLocaleString()}
+                                                    </td>
+                                                    <td className="px-6 py-4 font-medium text-black">{session.name}</td>
+                                                    <td className="px-6 py-4 text-zinc-600 truncate max-w-[200px]" title={session.email}>{session.email}</td>
+                                                    <td className="px-6 py-4 text-zinc-800">
+                                                        {primaryData ? `${primaryData.name} — ${primaryData.subtitle}` : session.primary_type}
+                                                    </td>
+                                                    <td className="px-6 py-4 text-zinc-800">
+                                                        {secondaryData ? `${secondaryData.name} — ${secondaryData.subtitle}` : session.secondary_type}
+                                                    </td>
+                                                    <td className="px-6 py-4 font-medium text-black">{session.hybrid_name}</td>
+                                                </tr>
+                                            );
+                                        })
                                     )}
                                 </tbody>
                             </table>

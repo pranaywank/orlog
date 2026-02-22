@@ -1,60 +1,9 @@
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import ScrollReveal from '@/components/ui/ScrollReveal';
+import { PM_TYPES } from '@/constants/types';
 
 export const revalidate = 0; // Disable caching to always show the latest count
-
-// Define hardcoded data mappings for the new sections
-const TYPE_CARDS = [
-  {
-    id: "seer",
-    name: "The Seer",
-    color: "bg-earth-gold",
-    border: "border-earth-gold",
-    tagline: "Thinks in futures and possibilities",
-    tags: ["Visionary", "Strategic", "Big Picture"],
-  },
-  {
-    id: "forge",
-    name: "The Forge",
-    color: "bg-earth-terracotta",
-    border: "border-earth-terracotta",
-    tagline: "Ships fast and executes with discipline",
-    tags: ["Executor", "Reliable", "Detail-oriented"],
-  },
-  {
-    id: "warden",
-    name: "The Warden",
-    color: "bg-earth-sage",
-    border: "border-earth-sage",
-    tagline: "Guards the user above everything else",
-    tags: ["Empathetic", "User-first", "Listener"],
-  },
-  {
-    id: "sage",
-    name: "The Sage",
-    color: "bg-slate-500",
-    border: "border-slate-500",
-    tagline: "Finds truth in data and patterns",
-    tags: ["Analytical", "Data-driven", "Rigorous"],
-  },
-  {
-    id: "weaver",
-    name: "The Weaver",
-    color: "bg-[#6B4A7C]",
-    border: "border-[#6B4A7C]",
-    tagline: "Connects people and builds alignment",
-    tags: ["Diplomatic", "Collaborative", "Bridge-builder"],
-  },
-  {
-    id: "sovereign",
-    name: "The Sovereign",
-    color: "bg-[#3A3530]",
-    border: "border-[#3A3530]",
-    tagline: "Owns everything, decides fast",
-    tags: ["Ownership", "Decisive", "Founder-minded"],
-  }
-];
 
 export default async function Home() {
   // Fetch session count from Supabase
@@ -141,8 +90,9 @@ export default async function Home() {
                 <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/40 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out z-20 pointer-events-none"></div>
 
                 <p className="text-xs font-bold tracking-widest text-earth-muted uppercase mb-4">Pranay, you are…</p>
-                <h3 className="text-[40px] font-serif font-bold text-earth-terracotta leading-none mb-2 relative z-10">The Seer</h3>
-                <p className="text-earth-dark/70 font-serif italic mb-6">with traits of The Forge</p>
+                <h3 className="text-[40px] font-serif font-bold text-earth-terracotta leading-none mb-1 relative z-10">{PM_TYPES.seer.name}</h3>
+                <p className="text-earth-terracotta/80 font-serif italic mb-2 relative z-10 text-lg">{PM_TYPES.seer.subtitle}</p>
+                <p className="text-earth-dark/70 font-serif italic mb-6">with traits of {PM_TYPES.forge.name}</p>
 
                 <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-earth-sage text-white font-semibold text-xs tracking-wider shadow-sm mb-8 z-10 relative">
                   The Architect
@@ -213,16 +163,17 @@ export default async function Home() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {TYPE_CARDS.map((type, i) => (
-                <div key={i} className={`bg-earth-card p-8 rounded-2xl border border-earth-border shadow-sm hover:scale-[1.02] hover:shadow-lg transition-transform duration-300 border-l-4 ${type.border} flex flex-col`}>
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center font-serif font-bold text-xl mb-6 text-white ${type.color}`}>
+              {Object.values(PM_TYPES).map((type, i) => (
+                <div key={i} className="bg-earth-card p-8 rounded-2xl border border-earth-border shadow-sm hover:scale-[1.02] hover:shadow-lg transition-transform duration-300 border-l-4 flex flex-col" style={{ borderLeftColor: type.color }}>
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center font-serif font-bold text-xl mb-6 text-white" style={{ backgroundColor: type.color }}>
                     {type.name.replace("The ", "").charAt(0)}
                   </div>
-                  <h3 className="text-2xl font-serif font-bold text-earth-dark mb-2">{type.name}</h3>
+                  <h3 className="text-2xl font-serif font-bold text-earth-dark mb-0">{type.name}</h3>
+                  <p className="text-earth-muted font-serif italic text-sm mb-4">{type.subtitle}</p>
                   <p className="text-earth-muted text-sm mb-8 flex-grow">{type.tagline}</p>
 
                   <div className="flex flex-wrap gap-2 mt-auto">
-                    {type.tags.map((tag, j) => (
+                    {type.strengths.slice(0, 3).map((tag, j) => (
                       <span key={j} className="inline-flex px-3 py-1 bg-earth-cream text-earth-dark text-[11px] font-bold uppercase tracking-wider rounded-md border border-earth-border">
                         {tag}
                       </span>

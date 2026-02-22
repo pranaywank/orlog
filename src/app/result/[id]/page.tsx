@@ -3,51 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-
-const DESCRIPTIONS: Record<string, string> = {
-    seer: "You think in futures. Where others see the present, you see what could be. Your superpower is vision — you pull people toward a compelling tomorrow.",
-    forge: "You ship. While others debate, you execute. Your superpower is turning plans into reality with discipline and relentless follow-through.",
-    mirror: "You are the user's voice in every room. You listen deeply, empathize genuinely, and refuse to ship things that hurt the people you serve.",
-    compass: "You let data lead. You find truth in numbers, build rigorous frameworks, and make decisions others can trust because the evidence is always there.",
-    herald: "You connect people. Your superpower is alignment — you make cross-functional teams feel like one team, and complex org dynamics feel manageable.",
-    anchor: "You own it. You act like a founder, move fast, take accountability, and rarely wait for permission. Where others hesitate, you decide.",
-};
-
-const DISPLAY_NAMES: Record<string, string> = {
-    seer: "The Seer",
-    forge: "The Forge",
-    mirror: "The Warden",
-    compass: "The Sage",
-    herald: "The Weaver",
-    anchor: "The Sovereign",
-};
-
-const STRENGTHS: Record<string, string[]> = {
-    seer: ["Visionary thinking", "Inspiring others", "Spotting trends early"],
-    forge: ["Reliable delivery", "Scope management", "Execution under pressure"],
-    mirror: ["Deep user empathy", "Customer advocacy", "Qualitative research"],
-    compass: ["Data rigour", "Hypothesis-driven thinking", "Metric definition"],
-    herald: ["Stakeholder alignment", "Cross-functional trust", "Conflict resolution"],
-    anchor: ["Ownership mindset", "Fast decision-making", "Founder-level accountability"]
-};
-
-const SPECTRUM_TAGLINES: Record<string, string> = {
-    seer: "Thinks in futures and possibilities",
-    forge: "Ships fast and executes with discipline",
-    mirror: "Guards the user above everything else",
-    compass: "Finds truth in data and patterns",
-    herald: "Connects people and builds alignment",
-    anchor: "Owns everything, decides fast"
-};
-
-const FAMOUS_ARCHETYPES: Record<string, { name: string, company: string, note: string }[]> = {
-    seer: [{ name: "Steve Jobs", company: "Apple", note: "Known for obsessive product vision and taste-driven decisions" }, { name: "Elon Musk", company: "Tesla / SpaceX", note: "Pushing boundaries of what is possible" }],
-    forge: [{ name: "Jeff Bezos", company: "Amazon", note: "Relentless execution and operational rigor" }, { name: "Sundar Pichai", company: "Google", note: "Scaling massive products with reliable delivery" }],
-    mirror: [{ name: "Stewart Butterfield", company: "Slack", note: "Deep focus on user experience and playfulness" }, { name: "Brian Chesky", company: "Airbnb", note: "Design-led, community-first product building" }],
-    compass: [{ name: "Marissa Mayer", company: "Google / Yahoo", note: "Data-driven, A/B testing pioneer" }, { name: "Kevin Systrom", company: "Instagram", note: "Metrics-informed simplicity" }],
-    herald: [{ name: "Sheryl Sandberg", company: "Meta", note: "Scaling through massive stakeholder alignment" }, { name: "Satya Nadella", company: "Microsoft", note: "Cultural transformation and empathic leadership" }],
-    anchor: [{ name: "Jensen Huang", company: "Nvidia", note: "Founder-led, decisive market positioning" }, { name: "Patrick Collison", company: "Stripe", note: "High agency, deep ownership of the developer experience" }]
-};
+import { PM_TYPES } from "@/constants/types";
 
 interface SessionData {
     name: string;
@@ -103,7 +59,7 @@ export default function ResultPage() {
         if (!data) return;
 
         const url = window.location.href;
-        const shareText = `I'm ${data.hybrid_name} — ${DISPLAY_NAMES[data.primary_type]} × ${DISPLAY_NAMES[data.secondary_type]}. Discover your PM type at https://orlog-test.netlify.app/\n\n${url}`;
+        const shareText = `I just discovered I'm ${data.hybrid_name} on Orlog.\nMy PM type: ${primaryData?.name} (${primaryData?.subtitle}) × ${secondaryData?.name} (${secondaryData?.subtitle}).\nFind out your PM personality → orlog.app\n\n${url}`;
 
         try {
             await navigator.clipboard.writeText(shareText);
@@ -137,11 +93,18 @@ export default function ResultPage() {
         );
     }
 
-    const primaryName = DISPLAY_NAMES[data.primary_type] || data.primary_type;
-    const secondaryName = DISPLAY_NAMES[data.secondary_type] || data.secondary_type;
+    const primaryTypeKey = data.primary_type as keyof typeof PM_TYPES;
+    const secondaryTypeKey = data.secondary_type as keyof typeof PM_TYPES;
+    const primaryData = PM_TYPES[primaryTypeKey];
+    const secondaryData = PM_TYPES[secondaryTypeKey];
 
-    const primaryDesc = DESCRIPTIONS[data.primary_type] || "";
-    const secondaryDesc = DESCRIPTIONS[data.secondary_type] || "";
+    const primaryName = primaryData?.name || `The ${data.primary_type}`;
+    const primarySubtitle = primaryData?.subtitle || "";
+    const primaryDesc = primaryData?.description || "";
+
+    const secondaryName = secondaryData?.name || `The ${data.secondary_type}`;
+    const secondarySubtitle = secondaryData?.subtitle || "";
+    const secondaryDesc = secondaryData?.description || "";
 
     return (
         <div className="flex min-h-screen flex-col items-center bg-earth-cream font-sans selection:bg-earth-terracotta selection:text-white pb-24">
@@ -163,15 +126,21 @@ export default function ResultPage() {
                         {data.name}, you are…
                     </h2>
 
-                    <div className="relative inline-block mb-2">
+                    <div className="relative inline-block mb-1">
                         <h1 className="text-[48px] sm:text-[64px] font-serif font-bold text-earth-dark leading-tight relative z-10">
                             {primaryName}
                         </h1>
                         <span className="absolute bottom-2 sm:bottom-4 left-0 w-full h-3 sm:h-4 bg-earth-terracotta/20 -z-0"></span>
                     </div>
 
-                    <p className="text-lg sm:text-xl font-medium text-earth-muted mb-10 font-serif italic">
-                        with traits of {secondaryName}
+                    {primarySubtitle && (
+                        <p className="text-xl sm:text-2xl font-serif italic text-earth-muted mb-6">
+                            {primarySubtitle}
+                        </p>
+                    )}
+
+                    <p className="text-lg sm:text-xl font-medium text-earth-dark mb-10 font-serif italic">
+                        with traits of {secondaryName}{secondarySubtitle ? ` — ${secondarySubtitle}` : ""}
                     </p>
 
                     <div className="flex flex-col items-center gap-4">
@@ -195,14 +164,15 @@ export default function ResultPage() {
                     {/* Primary Card */}
                     <div className="bg-earth-card p-8 sm:p-10 rounded-2xl border border-earth-border shadow-sm border-l-4 border-l-earth-terracotta flex flex-col">
                         <span className="text-xs font-bold tracking-widest text-earth-terracotta uppercase mb-4">Primary Type</span>
-                        <h3 className="text-2xl font-serif font-bold text-earth-dark mb-4">{primaryName}</h3>
+                        <h3 className="text-3xl font-serif font-bold text-earth-dark mb-1">{primaryName}</h3>
+                        <p className="text-lg font-serif italic text-earth-muted mb-6">{primarySubtitle}</p>
                         <p className="text-earth-dark leading-relaxed mb-8 flex-grow">
                             {primaryDesc}
                         </p>
                         <div>
                             <span className="text-sm font-bold uppercase tracking-wider text-earth-muted mb-3 block">Strengths</span>
                             <ul className="space-y-2">
-                                {(STRENGTHS[data.primary_type] || []).map((strength, i) => (
+                                {(primaryData?.strengths || []).map((strength, i) => (
                                     <li key={i} className="flex items-start gap-2 text-earth-dark text-sm sm:text-base">
                                         <span className="text-earth-terracotta mt-0.5">•</span> {strength}
                                     </li>
@@ -214,14 +184,15 @@ export default function ResultPage() {
                     {/* Secondary Card */}
                     <div className="bg-earth-card p-8 sm:p-10 rounded-2xl border border-earth-border shadow-sm border-l-4 border-l-earth-sage flex flex-col">
                         <span className="text-xs font-bold tracking-widest text-earth-sage uppercase mb-4">Secondary Type</span>
-                        <h3 className="text-2xl font-serif font-bold text-earth-dark mb-4">{secondaryName}</h3>
+                        <h3 className="text-3xl font-serif font-bold text-earth-dark mb-1">{secondaryName}</h3>
+                        <p className="text-lg font-serif italic text-earth-muted mb-6">{secondarySubtitle}</p>
                         <p className="text-earth-dark leading-relaxed mb-8 flex-grow">
                             {secondaryDesc}
                         </p>
                         <div>
                             <span className="text-sm font-bold uppercase tracking-wider text-earth-muted mb-3 block">Strengths</span>
                             <ul className="space-y-2">
-                                {(STRENGTHS[data.secondary_type] || []).map((strength, i) => (
+                                {(secondaryData?.strengths || []).map((strength, i) => (
                                     <li key={i} className="flex items-start gap-2 text-earth-dark text-sm sm:text-base">
                                         <span className="text-earth-sage mt-0.5">•</span> {strength}
                                     </li>
@@ -235,7 +206,8 @@ export default function ResultPage() {
                 <section className="mb-24">
                     <h2 className="text-3xl font-serif font-bold text-earth-dark mb-8 text-center">The PM Spectrum</h2>
                     <div className="flex overflow-x-auto pb-4 gap-4 snap-x snap-mandatory hide-scrollbars md:grid md:grid-cols-3 md:gap-6 md:overflow-visible">
-                        {Object.entries(DISPLAY_NAMES).map(([key, name]) => {
+                        {Object.values(PM_TYPES).map((type) => {
+                            const key = type.key;
                             const isPrimary = key === data.primary_type;
                             const isSecondary = key === data.secondary_type;
 
@@ -257,11 +229,12 @@ export default function ResultPage() {
                                 <div key={key} className={`bg-earth-card p-6 rounded-2xl border relative flex-shrink-0 w-[260px] md:w-auto snap-center flex flex-col items-center text-center transition-opacity ${borderClass}`}>
                                     {badge}
                                     <div className={`w-12 h-12 rounded-full flex items-center justify-center font-serif font-bold text-xl mb-4 ${circleBg}`}>
-                                        {name.replace("The ", "").charAt(0)}
+                                        {type.name.replace("The ", "").charAt(0)}
                                     </div>
-                                    <h4 className="font-serif font-bold text-earth-dark text-lg mb-2">{name}</h4>
-                                    <p className="text-sm text-earth-muted leading-relaxed">
-                                        {SPECTRUM_TAGLINES[key]}
+                                    <h4 className="font-serif font-bold text-earth-dark text-xl mb-0">{type.name}</h4>
+                                    <p className="text-sm font-serif italic text-earth-muted mb-3">{type.subtitle}</p>
+                                    <p className="text-sm text-earth-dark/80 leading-relaxed font-medium">
+                                        {type.tagline}
                                     </p>
                                 </div>
                             );
@@ -273,7 +246,7 @@ export default function ResultPage() {
                 <section className="mb-32">
                     <h2 className="text-3xl font-serif font-bold text-earth-dark mb-8 text-center">You're in Good Company</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {(FAMOUS_ARCHETYPES[data.primary_type] || []).map((person, i) => (
+                        {(primaryData?.famousPMs || []).map((person, i) => (
                             <div key={i} className="bg-earth-card p-6 rounded-2xl border border-earth-border shadow-sm hover:shadow-md transition-shadow">
                                 <h4 className="font-serif font-bold text-earth-dark text-xl mb-1">{person.name}</h4>
                                 <p className="text-earth-muted text-sm font-medium mb-3 uppercase tracking-wider">{person.company}</p>
