@@ -103,7 +103,7 @@ export default function ResultPage() {
         if (!data) return;
 
         const url = window.location.href;
-        const shareText = `I'm ${data.hybrid_name} — ${DISPLAY_NAMES[data.primary_type]} × ${DISPLAY_NAMES[data.secondary_type]}. Discover your PM type at orlog.app\n\n${url}`;
+        const shareText = `I'm ${data.hybrid_name} — ${DISPLAY_NAMES[data.primary_type]} × ${DISPLAY_NAMES[data.secondary_type]}. Discover your PM type at https://orlog-test.netlify.app/\n\n${url}`;
 
         try {
             await navigator.clipboard.writeText(shareText);
