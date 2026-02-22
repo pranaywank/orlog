@@ -86,7 +86,7 @@ function CaptureContent() {
 
             // Success
             if (data && data.length > 0) {
-                router.push(`/ result / ${data[0].id} `);
+                router.push(`/result/${data[0].id}`);
             } else {
                 throw new Error("Failed to retrieve session ID.");
             }
