@@ -35,7 +35,7 @@ function CaptureContent() {
 
         setPrimaryType(primary);
         setSecondaryType(secondary);
-        setHybridName(hybrid || "The Enigma");
+        setHybridName(hybrid);
 
         if (scores) {
             try {
@@ -114,11 +114,15 @@ function CaptureContent() {
     return (
         <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans selection:bg-black selection:text-white px-6 py-12">
             <div className="w-full max-w-lg bg-white p-8 sm:p-12 rounded-3xl shadow-sm border border-zinc-200 animate-in fade-in zoom-in-95 duration-500 text-center">
-                <div className="mb-8">
-                    <p className="text-sm font-semibold tracking-widest text-zinc-400 uppercase mb-3">Your Result</p>
-                    <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-black mb-3">{primaryTitle}</h1>
+                <div className="mb-10 mt-4 text-center">
+                    <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-zinc-100 mb-6">
+                        <span className="text-xl">🔮</span>
+                    </div>
+                    <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-black mb-3">
+                        Your results are ready
+                    </h1>
                     <p className="text-base sm:text-lg text-zinc-500 font-medium leading-relaxed">
-                        with traits of <span className="text-zinc-700">{secondaryTitle}</span>
+                        Find out your PM personality type along with your strengths, blind spots, and how to leverage them.
                     </p>
                 </div>
                 <div className="text-center mb-10">

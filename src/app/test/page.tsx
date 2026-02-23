@@ -80,6 +80,17 @@ const hybridMap: Record<string, string> = {
     "herald-anchor": "The Sovereign Weaver",
 };
 
+function getHybrid(type1: string, type2: string): string | null {
+    const key1 = `${type1}-${type2}`;
+    const key2 = `${type2}-${type1}`;
+    const name = hybridMap[key1] || hybridMap[key2];
+    if (!name) {
+        console.warn(`Unmatched hybrid combination: ${type1} + ${type2}`);
+        return null;
+    }
+    return name;
+}
+
 export default function TestPage() {
     const router = useRouter();
 
@@ -142,6 +153,15 @@ export default function TestPage() {
             }
         });
 
+        console.log("Orlog scores:", {
+            seer: scores.seer,
+            forge: scores.forge,
+            mirror: scores.mirror,
+            compass: scores.compass,
+            herald: scores.herald,
+            anchor: scores.anchor
+        });
+
         const entries = Object.entries(scores).sort((a, b) => b[1] - a[1]);
         const top1 = entries[0][0];
         const top2 = entries[1][0];
@@ -151,17 +171,17 @@ export default function TestPage() {
         let primary = top1;
         let secondary = top2;
 
-        // Handle Tie: if equal, treat as hybrid.
-        // If not equal, we already sorted primary & secondary properly.
-        // We can pass them as params
-        let hybridName = hybridMap[sortedKey] || "The Enigma";
+        let hybridName = getHybrid(primary, secondary);
 
         const params = new URLSearchParams({
             primary,
             secondary,
-            hybrid: hybridName,
             scores: JSON.stringify(scores) // Pass raw dimension scores
         });
+
+        if (hybridName) {
+            params.set("hybrid", hybridName);
+        }
 
         router.push(`/capture?${params.toString()}`);
     };
