@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { PM_TYPES } from "@/constants/types";
 
 interface SessionData {
@@ -35,13 +36,26 @@ export default function AdminPage() {
         setLoading(true);
         setError(null);
         try {
-            const { data, error: supaError } = await supabase
-                .from("sessions")
-                .select("*")
-                .order("created_at", { ascending: false });
-
-            if (supaError) throw supaError;
-            setSessions((data as SessionData[]) || []);
+            const q = query(
+                collection(db, "sessions"),
+                orderBy("created_at", "desc")
+            );
+            const querySnapshot = await getDocs(q);
+            const sessionsData = querySnapshot.docs.map((docSnap) => {
+                const d = docSnap.data();
+                return {
+                    id: docSnap.id,
+                    name: d.name,
+                    email: d.email,
+                    primary_type: d.primary_type,
+                    secondary_type: d.secondary_type,
+                    hybrid_name: d.hybrid_name,
+                    created_at: d.created_at?.toDate?.()
+                        ? d.created_at.toDate().toISOString()
+                        : d.created_at,
+                } as SessionData;
+            });
+            setSessions(sessionsData);
         } catch (err: any) {
             console.error(err);
             setError("Failed to load sessions");

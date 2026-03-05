@@ -1,21 +1,20 @@
 import Link from 'next/link';
-import { supabase } from '@/lib/supabase';
+import { db } from '@/lib/firebase';
+import { collection, getCountFromServer } from 'firebase/firestore';
 import ScrollReveal from '@/components/ui/ScrollReveal';
 import { PM_TYPES } from '@/constants/types';
 
 export const revalidate = 0; // Disable caching to always show the latest count
 
 export default async function Home() {
-  // Fetch session count from Supabase
-  const { count, error } = await supabase
-    .from('sessions')
-    .select('*', { count: 'exact', head: true });
-
-  if (error) {
+  // Fetch session count from Firestore
+  let sessionCount = 0;
+  try {
+    const snapshot = await getCountFromServer(collection(db, 'sessions'));
+    sessionCount = snapshot.data().count;
+  } catch (error) {
     console.error("Error fetching session count:", error);
   }
-
-  const sessionCount = count || 0;
 
   return (
     <div className="flex min-h-screen flex-col font-sans bg-earth-cream selection:bg-earth-terracotta selection:text-white">

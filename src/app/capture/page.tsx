@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { db } from "@/lib/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { PM_TYPES } from "@/constants/types";
 
 export const dynamic = 'force-dynamic'; // Prevent static prerendering issues
@@ -64,33 +65,21 @@ function CaptureContent() {
         setLoading(true);
 
         try {
-            // Insert into Supabase
-            const { data, error: supaError } = await supabase
-                .from("sessions")
-                .insert([
-                    {
-                        name: name.trim(),
-                        email: email.trim(),
-                        primary_type: primaryType,
-                        secondary_type: secondaryType,
-                        hybrid_name: hybridName,
-                        dimension_scores: dimensionScores
-                    },
-                ])
-                .select();
+            // Insert into Firestore
+            const docRef = await addDoc(collection(db, "sessions"), {
+                name: name.trim(),
+                email: email.trim(),
+                primary_type: primaryType,
+                secondary_type: secondaryType,
+                hybrid_name: hybridName,
+                dimension_scores: dimensionScores,
+                created_at: serverTimestamp(),
+            });
 
-            if (supaError) {
-                console.error("Supabase Error:", supaError);
-                throw new Error("Something went wrong. Please try again.");
-            }
-
-            // Success
-            if (data && data.length > 0) {
-                router.push(`/result/${data[0].id}`);
-            } else {
-                throw new Error("Failed to retrieve session ID.");
-            }
+            // Success — navigate to result page using the new doc ID
+            router.push(`/result/${docRef.id}`);
         } catch (err: any) {
+            console.error("Firebase Error:", err);
             setError(err.message || "Something went wrong. Please try again.");
             setLoading(false);
         }

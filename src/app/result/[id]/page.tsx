@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { db } from "@/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
 import { PM_TYPES } from "@/constants/types";
 
 interface SessionData {
@@ -33,17 +34,14 @@ export default function ResultPage() {
             }
 
             try {
-                const { data: sessionData, error: supaError } = await supabase
-                    .from("sessions")
-                    .select("name, primary_type, secondary_type, hybrid_name, dimension_scores")
-                    .eq("id", params.id)
-                    .single();
+                const docRef = doc(db, "sessions", params.id as string);
+                const docSnap = await getDoc(docRef);
 
-                if (supaError || !sessionData) {
+                if (!docSnap.exists()) {
                     throw new Error("Not found");
                 }
 
-                setData(sessionData as SessionData);
+                setData(docSnap.data() as SessionData);
             } catch (err) {
                 console.error(err);
                 setError(true);
