@@ -570,8 +570,8 @@ export default function ResultPage() {
                                 <span style={{ fontSize: "22px", fontWeight: 500, color: "#8A8480" }}>Take the test at <strong style={{ color: "#C45C3A" }}>orlog.fourg.dev</strong></span>
                             </div>
                             
-                            {/* Background decoration - Explicit safely constructed radial gradient for Canvas parsing */}
-                            <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "600px", height: "600px", background: "radial-gradient(circle, rgba(196,92,58,0.08) 0%, rgba(74,124,111,0.05) 100%)", borderRadius: "50%", filter: "blur(100px)", zIndex: 0 }}></div>
+                            {/* Background decoration - Explicit safely constructed solid color block with blur instead of radial-gradient for Canvas parsing */}
+                            <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "600px", height: "600px", backgroundColor: "rgba(196,92,58,0.04)", borderRadius: "50%", filter: "blur(100px)", zIndex: 0 }}></div>
                         </div>
                     </div>
 
