@@ -30,10 +30,10 @@ export default function PMRadarChart({ scores }: RadarChartProps) {
             <div className="h-[300px] sm:h-[400px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                     <RadarChart cx="50%" cy="50%" outerRadius="70%" data={data}>
-                        <PolarGrid stroke="#E8E4DC" />
+                        <PolarGrid stroke="#E2DFD8" />
                         <PolarAngleAxis
                             dataKey="subject"
-                            tick={{ fill: "#6B6560", fontSize: 14, fontWeight: 500 }}
+                            tick={{ fill: "#8A8480", fontSize: 14, fontWeight: 500 }}
                         />
                         <PolarRadiusAxis
                             angle={30}
@@ -45,14 +45,19 @@ export default function PMRadarChart({ scores }: RadarChartProps) {
                             name="PM Signature"
                             dataKey="A"
                             stroke="#C45C3A"
+                            strokeWidth={2}
                             fill="#C45C3A"
-                            fillOpacity={0.3}
+                            fillOpacity={0.4}
                             dot={{ r: 4, fill: "#4A7C6F", strokeWidth: 0 }}
+                            isAnimationActive={true}
+                            animationBegin={0}
+                            animationDuration={800}
+                            animationEasing="ease-out"
                         />
                     </RadarChart>
                 </ResponsiveContainer>
             </div>
-            <p className="text-center text-sm font-medium text-earth-muted max-w-md mx-auto mt-4 leading-relaxed px-4">
+            <p className="text-center text-sm font-medium text-[#8A8480] max-w-md mx-auto mt-4 leading-relaxed px-4">
                 Your shape shows where your PM instincts naturally cluster. A taller spike means a stronger tendency — not better or worse, just more you.
             </p>
         </div>

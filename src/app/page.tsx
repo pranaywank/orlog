@@ -1,8 +1,15 @@
-import Link from 'next/link';
-import { db } from '@/lib/firebase';
-import { collection, getCountFromServer } from 'firebase/firestore';
-import ScrollReveal from '@/components/ui/ScrollReveal';
-import { PM_TYPES } from '@/constants/types';
+import Link from "next/link";
+import { db } from "@/lib/firebase";
+import { collection, getCountFromServer } from "firebase/firestore";
+import { PM_TYPES } from "@/constants/types";
+
+// Import Aceternity & Motion Components
+import { BackgroundLines } from "@/components/ui/background-lines";
+import { LampEffect } from "@/components/ui/lamp";
+import { ShootingStars } from "@/components/ui/shooting-stars";
+import { Highlight } from "@/components/ui/hero-highlight";
+import { Meteors } from "@/components/ui/meteors";
+import * as motion from "motion/react-client";
 
 export const revalidate = 0; // Disable caching to always show the latest count
 
@@ -10,272 +17,369 @@ export default async function Home() {
   // Fetch session count from Firestore
   let sessionCount = 0;
   try {
-    const snapshot = await getCountFromServer(collection(db, 'sessions'));
+    const snapshot = await getCountFromServer(collection(db, "sessions"));
     sessionCount = snapshot.data().count;
   } catch (error) {
     console.error("Error fetching session count:", error);
   }
 
-  return (
-    <div className="flex min-h-screen flex-col font-sans bg-earth-cream selection:bg-earth-terracotta selection:text-white">
+  // Format PM types for Card Hover Effect
+  const pmTypeCards = Object.values(PM_TYPES).map((type) => ({
+    title: type.name,
+    description: `${type.subtitle}\n\n${type.tagline}`,
+    link: "#types", // Internal anchor or keeping it empty if just for display
+    rawType: type, // Pass full object for custom rendering inside HoverEffect if we extended it, otherwise we map locally below.
+  }));
 
+  return (
+    <div className="flex min-h-screen flex-col font-sans bg-[#0A0A0A] text-[#F5F0E8] selection:bg-[#C45C3A] selection:text-white overflow-hidden">
       {/* --- SECTION 1: NAVIGATION BAR --- */}
-      <nav className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-earth-border shadow-sm transition-all duration-300">
-        <div className="max-w-[1100px] mx-auto px-6 h-16 sm:h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link href="/" className="text-2xl font-serif text-earth-dark font-bold tracking-tight">
-              Orlog
-            </Link>
-            {/* Runes-inspired decorative mark */}
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-earth-terracotta">
-              <path d="M12 4L12 20M12 4L18 10M12 12L18 18M12 20L6 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
+      <nav className="absolute top-0 left-0 w-full z-50 bg-transparent">
+        <div className="w-full pt-8 pl-10 flex items-center">
           <Link
-            href="/test"
-            className="inline-flex h-10 sm:h-11 items-center justify-center rounded-full bg-earth-terracotta px-6 font-medium text-white transition-all hover:bg-[#A34B2E] focus:outline-none focus:ring-2 focus:ring-earth-terracotta focus:ring-offset-2 text-sm sm:text-base font-sans"
+            href="/"
+            className="text-[28px] font-serif text-[#F5F0E8] font-normal tracking-tight opacity-50 hover:opacity-100 transition-opacity"
           >
-            Take the Test <span className="ml-1.5 transition-transform group-hover:translate-x-1">→</span>
+            Orlog
           </Link>
         </div>
       </nav>
 
-      <main className="flex-1 flex flex-col w-full">
+      <main className="flex-1 flex flex-col w-full relative z-10">
+        {/* === FIXED ATMOSPHERE BACKGROUND === */}
+        <div className="fixed inset-0 w-full h-full z-0 pointer-events-none">
+          <BackgroundLines />
+          <ShootingStars />
+          <LampEffect />
+        </div>
 
         {/* --- SECTION 2: HERO --- */}
-        <section className="relative w-full overflow-hidden min-h-[80vh] flex items-center pt-8 pb-16 sm:py-24">
-          {/* Subtle radial gradients */}
-          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-earth-terracotta/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3 z-0"></div>
-          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-earth-sage/10 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/3 z-0"></div>
+        <section className="relative w-full h-[100vh] min-h-[600px] flex items-center justify-center overflow-hidden">
+          <div className="max-w-[660px] mx-auto w-full px-6 flex flex-col items-center text-center relative z-10">
+              
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="text-[11px] font-sans font-bold tracking-[0.25em] text-[#C45C3A] uppercase mb-8"
+              >
+                PM PERSONALITY TEST
+              </motion.div>
 
-          <div className="max-w-[1100px] mx-auto w-full px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-12 relative z-10">
-            {/* Left Column */}
-            <div className="flex flex-col justify-center animate-in fade-in slide-in-from-bottom-8 duration-1000 fill-mode-both">
-              <span className="text-xs sm:text-sm font-bold tracking-[0.2em] text-earth-terracotta uppercase mb-6 block">
-                PM Personality Test
-              </span>
-              <h1 className="text-[44px] sm:text-[56px] lg:text-[64px] font-serif font-bold text-earth-dark leading-[1.05] tracking-tight mb-6">
-                Discover the PM<br />
-                you <span className="italic text-earth-terracotta pr-2">truly</span> are.
-              </h1>
-              <p className="text-lg sm:text-xl text-earth-muted leading-relaxed max-w-[440px] mb-10">
-                Orlog reveals your product management personality through 30 real-world scenarios. Know your type. Understand your strengths. Find your path.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 mb-10">
-                <Link
-                  href="/test"
-                  className="group inline-flex h-14 w-full sm:w-auto min-w-[200px] items-center justify-center rounded-full bg-earth-terracotta px-8 font-medium text-white transition-all hover:bg-[#A34B2E] shadow-sm text-base"
+              <div className="text-[34px] sm:text-[42px] lg:text-[62px] font-serif font-normal text-[#F5F0E8] leading-[1.08] tracking-[-0.02em] mb-8">
+                <motion.div
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 1.2 }}
                 >
-                  Take the Test <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1">→</span>
+                  Discover the PM
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 1.38 }}
+                >
+                  you <span className="italic text-[#C45C3A]">truly</span> are.
+                </motion.div>
+              </div>
+
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 2.43 }}
+                className="text-base font-sans text-[#6B6560] leading-[1.65] max-w-[400px] w-full mx-auto mb-10"
+              >
+                Trust your instincts. Know your type. Find your true path.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 3.23 }}
+                className="mb-8"
+              >
+                <Link href="/test">
+                  <motion.button
+                    whileHover={{ scale: 1.04, boxShadow: "0 0 36px rgba(196,92,58,0.45)" }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={{ duration: 0.18, ease: "easeOut" }}
+                    className="inline-flex items-center justify-center rounded-full bg-[#C45C3A] px-[38px] py-[14px] font-sans text-[15px] font-medium text-[#F5F0E8] focus:outline-none"
+                  >
+                    Start The Experience <span className="ml-[0.25em] font-serif">→</span>
+                  </motion.button>
                 </Link>
-                <a
-                  href="#types"
-                  className="group inline-flex h-14 w-full sm:w-auto min-w-[200px] items-center justify-center rounded-full border-2 border-earth-terracotta bg-transparent px-8 font-medium text-earth-terracotta transition-all hover:bg-earth-terracotta/5 text-base"
-                >
-                  See the 6 Types <span className="ml-2 transition-transform duration-300 group-hover:translate-y-1">↓</span>
-                </a>
-              </div>
+              </motion.div>
 
-              <p className="text-sm font-medium text-earth-muted flex items-center gap-2">
-                <span className="text-base">🧭</span> {sessionCount.toLocaleString()} PMs have discovered their nature.
-              </p>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 3.83 }}
+                className="text-[13px] font-sans text-[#3D3835] flex items-center justify-center gap-1.5"
+              >
+                🧭 {sessionCount.toLocaleString()} PMs have discovered their nature.
+              </motion.div>
             </div>
-
-            {/* Right Column (Decorative Card) */}
-            <div className="flex items-center justify-center lg:justify-end animate-in fade-in duration-1000 delay-300 fill-mode-both relative">
-              <div className="w-full max-w-[400px] bg-earth-card p-8 sm:p-10 rounded-3xl border border-earth-border shadow-xl transform rotate-3 hover:rotate-2 transition-transform duration-500 floating-card border-l-4 border-l-earth-terracotta relative overflow-hidden group">
-                {/* Subtle sheen reflection */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/40 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out z-20 pointer-events-none"></div>
-
-                <p className="text-xs font-bold tracking-widest text-earth-muted uppercase mb-4">Pranay, you are…</p>
-                <h3 className="text-[40px] font-serif font-bold text-earth-terracotta leading-none mb-1 relative z-10">{PM_TYPES.seer.name}</h3>
-                <p className="text-earth-terracotta/80 font-serif italic mb-2 relative z-10 text-lg">{PM_TYPES.seer.subtitle}</p>
-                <p className="text-earth-dark/70 font-serif italic mb-6">with traits of {PM_TYPES.forge.name}</p>
-
-                <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-earth-sage text-white font-semibold text-xs tracking-wider shadow-sm mb-8 z-10 relative">
-                  The Architect
-                </div>
-
-                {/* Fake Radar Chart graphic */}
-                <div className="w-full flex justify-center mt-2 relative z-10">
-                  <svg width="220" height="220" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    {/* Outline webs */}
-                    <polygon points="100,20 170,60 170,140 100,180 30,140 30,60" stroke="#E8E4DC" strokeWidth="1" fill="none" />
-                    <polygon points="100,45 145,70 145,130 100,155 55,130 55,70" stroke="#E8E4DC" strokeWidth="1" fill="none" />
-                    <polygon points="100,70 125,85 125,115 100,130 75,115 75,85" stroke="#E8E4DC" strokeWidth="1" fill="none" />
-                    {/* Center crosshairs */}
-                    <line x1="100" y1="20" x2="100" y2="180" stroke="#E8E4DC" strokeWidth="1" />
-                    <line x1="30" y1="60" x2="170" y2="140" stroke="#E8E4DC" strokeWidth="1" />
-                    <line x1="170" y1="60" x2="30" y2="140" stroke="#E8E4DC" strokeWidth="1" />
-
-                    {/* Filled data polygon */}
-                    <polygon points="100,30 160,80 140,150 100,120 40,140 60,60" fill="#C45C3A" fillOpacity="0.3" stroke="#C45C3A" strokeWidth="2" strokeLinejoin="round" />
-
-                    {/* Dots */}
-                    <circle cx="100" cy="30" r="4" fill="#4A7C6F" />
-                    <circle cx="160" cy="80" r="4" fill="#4A7C6F" />
-                    <circle cx="140" cy="150" r="4" fill="#4A7C6F" />
-                    <circle cx="100" cy="120" r="4" fill="#4A7C6F" />
-                    <circle cx="40" cy="140" r="4" fill="#4A7C6F" />
-                    <circle cx="60" cy="60" r="4" fill="#4A7C6F" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div>
         </section>
 
-        {/* --- SECTION 3: HOW IT WORKS --- */}
-        <section className="py-24 sm:py-32 bg-earth-cream w-full">
-          <ScrollReveal className="max-w-[1100px] mx-auto px-6">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl sm:text-[40px] font-serif font-bold text-earth-dark mb-4">How Orlog Works</h2>
-              <p className="text-lg text-earth-muted">Three steps to knowing your PM nature.</p>
-            </div>
+        {/* SECTION SEPARATOR */}
+        <hr className="w-[80%] max-w-[1100px] mx-auto border-t border-[#1E1A17] my-0 relative z-10 relative" />
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-              {[
-                { step: "01", icon: "📋", title: "Answer 30 Scenarios", desc: "Real workplace situations. No right answers — just your instincts. Takes 10–15 minutes." },
-                { step: "02", icon: "🔮", title: "Get Your PM Type", desc: "Orlog maps your answers to one of 6 PM personalities and reveals your unique hybrid type." },
-                { step: "03", icon: "🧭", title: "Understand Yourself", desc: "See your PM signature chart, your strengths, your blind spots, and famous PMs who think like you." }
-              ].map((item, i) => (
-                <div key={i} className="bg-earth-card p-8 rounded-2xl border border-earth-border shadow-sm hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-                  <span className="text-xl font-serif font-bold text-earth-terracotta mb-6 block">{item.step}</span>
-                  <div className="text-3xl mb-4">{item.icon}</div>
-                  <h3 className="text-xl font-bold text-earth-dark mb-3">{item.title}</h3>
-                  <p className="text-earth-muted leading-relaxed">{item.desc}</p>
-                </div>
-              ))}
-            </div>
-          </ScrollReveal>
-        </section>
-
-        {/* --- SECTION 4: THE 6 PM TYPES --- */}
-        <section id="types" className="py-24 sm:py-32 bg-[#FDF5F2] w-full border-y border-earth-border/50">
-          <ScrollReveal className="max-w-[1100px] mx-auto px-6">
-            <div className="text-center mb-16 sm:mb-20">
-              <h2 className="text-4xl sm:text-[44px] font-serif font-bold text-earth-dark mb-6">Which PM are you?</h2>
-              <p className="text-lg text-earth-dark/70 max-w-2xl mx-auto leading-relaxed">
+        {/* --- SECTION 3: THE 6 PM TYPES --- */}
+        <section id="types" className="py-24 sm:py-32 bg-transparent w-full relative z-10">
+          <div className="max-w-[1100px] mx-auto px-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              className="text-center mb-16 sm:mb-20"
+            >
+              <h2 className="text-4xl sm:text-[44px] font-serif font-bold text-[#F5F0E8] mb-6">Which PM are you?</h2>
+              <p className="text-lg text-[#8A8480] max-w-2xl mx-auto leading-relaxed">
                 Orlog identifies 6 core PM personalities. Most people are a blend of two.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Object.values(PM_TYPES).map((type, i) => (
-                <div key={i} className="bg-earth-card p-8 rounded-2xl border border-earth-border shadow-sm hover:scale-[1.02] hover:shadow-lg transition-transform duration-300 border-l-4 flex flex-col" style={{ borderLeftColor: type.color }}>
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center font-serif font-bold text-xl mb-6 text-white" style={{ backgroundColor: type.color }}>
-                    {type.name.replace("The ", "").charAt(0)}
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
+                {Object.values(PM_TYPES).map((type: any, i) => (
+                  <div
+                    key={i}
+                    className="p-8 rounded-2xl border border-[#2A2A2A] bg-[#1A1A1A] flex flex-col group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
+                  >
+                    <div
+                      className="absolute top-0 left-0 w-full h-1"
+                      style={{ backgroundColor: type.color }}
+                    />
+                    <div
+                      className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none"
+                      style={{
+                        background: `radial-gradient(circle at 50% 120%, ${type.color}, transparent)`,
+                      }}
+                    />
+                    
+                    <div className="text-4xl mb-6 relative z-10">{type.icon || "🔮"}</div>
+                    
+                    <h3 className="text-2xl font-serif font-bold text-[#F5F0E8] mb-1 relative z-10">{type.name}</h3>
+                    <p className="text-[#8A8480] font-serif italic text-sm mb-4 relative z-10">{type.subtitle}</p>
+                    <p className="text-[#8A8480] text-sm mb-8 flex-grow relative z-10">{type.tagline}</p>
+
+                    <div className="flex flex-wrap gap-2 mt-auto relative z-10">
+                      {(type.strengths || []).slice(0, 3).map((tag: string, j: number) => (
+                        <span
+                          key={j}
+                          className="inline-flex px-3 py-1 font-bold uppercase tracking-wider rounded-md text-[11px]"
+                          style={{
+                            backgroundColor: `${type.color}26`, 
+                            color: type.color,
+                            border: `1px solid ${type.color}40`,
+                          }}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                  <h3 className="text-2xl font-serif font-bold text-earth-dark mb-0">{type.name}</h3>
-                  <p className="text-earth-muted font-serif italic text-sm mb-4">{type.subtitle}</p>
-                  <p className="text-earth-muted text-sm mb-8 flex-grow">{type.tagline}</p>
+                ))}
+              </div>
+            </motion.div>
 
-                  <div className="flex flex-wrap gap-2 mt-auto">
-                    {type.strengths.slice(0, 3).map((tag, j) => (
-                      <span key={j} className="inline-flex px-3 py-1 bg-earth-cream text-earth-dark text-[11px] font-bold uppercase tracking-wider rounded-md border border-earth-border">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="text-center mt-16 sm:mt-20">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mt-16 sm:mt-20"
+            >
               <Link
                 href="/test"
-                className="group inline-flex h-14 items-center justify-center rounded-full bg-earth-terracotta px-10 font-medium text-white transition-all hover:bg-[#A34B2E] shadow-sm text-base"
+                className="group inline-flex h-14 items-center justify-center rounded-full bg-[#C45C3A] px-10 font-medium text-white transition-all hover:bg-[#A34B2E] shadow-sm text-base hover:shadow-[0_0_20px_rgba(196,92,58,0.5)]"
               >
                 Find Out Which One You Are <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1">→</span>
               </Link>
-            </div>
-          </ScrollReveal>
+            </motion.div>
+          </div>
         </section>
 
-        {/* --- SECTION 5: HYBRID TYPES TEASER --- */}
-        <section className="py-20 sm:py-24 bg-[#2A2420] w-full selection:bg-earth-gold selection:text-[#2A2420]">
-          <ScrollReveal className="max-w-[900px] mx-auto px-6 text-center">
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-earth-gold mb-6">
-              30 scenarios. 6 types. 15 possible combinations.
+        {/* SECTION SEPARATOR */}
+        <hr className="w-[80%] max-w-[1100px] mx-auto border-t border-[#1E1A17] my-0 relative z-10 relative" />
+
+        {/* --- SECTION 4: HYBRID TYPES TEASER --- */}
+        <section className="relative py-20 sm:py-24 bg-transparent overflow-hidden w-full selection:bg-[#C4973A] selection:text-[#1A1210] z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-[900px] mx-auto px-6 text-center relative z-10"
+          >
+            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#C4973A] mb-6 drop-shadow-[0_0_10px_rgba(196,151,58,0.3)]">
+              Your instincts. 6 core types. 15 unique combinations.
             </h2>
-            <p className="text-lg sm:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed mb-12">
+            <p className="text-lg sm:text-xl text-[#F5F0E8]/80 max-w-2xl mx-auto leading-relaxed mb-12">
               Your result isn't just a single type — it's a unique blend. Orlog identifies your hybrid personality from 15 possible combinations.
             </p>
 
             <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-16">
               {["The Architect", "The Oracle", "The Titan", "The Crusader", "The Strategist"].map((hybrid, i) => (
-                <div key={i} className="px-5 py-2.5 rounded-full border border-earth-gold/40 text-earth-gold font-medium text-sm sm:text-base whitespace-nowrap bg-white/5 backdrop-blur-sm">
+                <div key={i} className="px-5 py-2.5 rounded-full border border-[#C4973A] text-[#C4973A] shadow-[0_0_10px_rgba(196,151,58,0.2)] font-medium text-sm sm:text-base whitespace-nowrap bg-black/40 backdrop-blur-md">
                   {hybrid}
                 </div>
               ))}
             </div>
 
-            <p className="text-sm text-white/60 mb-8 uppercase tracking-widest font-bold">
+            <p className="text-sm text-[#F5F0E8]/60 mb-8 uppercase tracking-widest font-bold">
               Which hybrid are you? Take the test to find out.
             </p>
             <Link
               href="/test"
-              className="group inline-flex h-14 items-center justify-center rounded-full border-2 border-white bg-transparent px-10 font-medium text-white transition-all hover:bg-white hover:text-[#2A2420] text-sm sm:text-base"
+              className="group inline-flex h-14 items-center justify-center rounded-full border border-[#C4973A] bg-transparent px-10 font-medium text-[#C4973A] transition-all hover:bg-[#C4973A] hover:text-[#1A1210] text-sm sm:text-base hover:shadow-[0_0_20px_rgba(196,151,58,0.4)]"
             >
               Discover My Type <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1">→</span>
             </Link>
-          </ScrollReveal>
+          </motion.div>
         </section>
 
-        {/* --- SECTION 6: SOCIAL PROOF --- */}
-        <section className="py-24 sm:py-32 bg-earth-cream w-full">
-          <ScrollReveal className="max-w-[1100px] mx-auto px-6 text-center">
-            <h2 className="text-3xl sm:text-[40px] font-serif font-bold text-earth-dark mb-16">Built for real PMs</h2>
+        {/* SECTION SEPARATOR */}
+        <hr className="w-[80%] max-w-[1100px] mx-auto border-t border-[#1E1A17] my-0 relative z-10 relative" />
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 sm:gap-8 mb-20 max-w-[900px] mx-auto">
+        {/* --- SECTION 5: HOW IT WORKS --- */}
+        <section className="py-24 sm:py-32 bg-transparent w-full relative z-20">
+          <div className="max-w-[1100px] mx-auto px-6">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl sm:text-[40px] font-serif font-bold text-[#F5F0E8] mb-4">How Orlog Works</h2>
+              <p className="text-lg text-[#8A8480]">Three steps to knowing your PM nature.</p>
+            </div>
+
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={{
+                hidden: {},
+                visible: { transition: { staggerChildren: 0.2 } },
+              }}
+              className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8"
+            >
               {[
-                { title: "30 Real Scenarios", desc: "Not abstract questions. Real PM situations you've actually faced." },
+                { step: "01", icon: "📋", title: "Trust Your Gut", desc: "Immerse yourself in real workplace situations. There are no right answers — just your natural instincts." },
+                { step: "02", icon: "🔮", title: "Get Your PM Type", desc: "Orlog maps your answers to one of 6 PM personalities and reveals your unique hybrid type." },
+                { step: "03", icon: "🧭", title: "Understand Yourself", desc: "See your PM signature chart, your strengths, your blind spots, and famous PMs who think like you." }
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    visible: { opacity: 1, y: 0 },
+                  }}
+                  className="bg-[#1A1A1A] p-8 rounded-2xl border border-[#2A2A2A] shadow-lg"
+                >
+                  <span className="text-xl font-serif font-bold text-[#C45C3A] mb-6 block">{item.step}</span>
+                  <div className="text-3xl mb-4 opacity-80">{item.icon}</div>
+                  <h3 className="text-xl font-bold text-[#F5F0E8] mb-3">{item.title}</h3>
+                  <p className="text-[#8A8480] leading-relaxed">{item.desc}</p>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
+        {/* SECTION SEPARATOR */}
+        <hr className="w-[80%] max-w-[1100px] mx-auto border-t border-[#1E1A17] my-0 relative z-10 relative" />
+
+        {/* --- SECTION 6: SOCIAL PROOF --- */}
+        <section className="py-24 sm:py-32 bg-transparent w-full relative z-10">
+          <div className="max-w-[1100px] mx-auto px-6 text-center">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-3xl sm:text-[40px] font-serif font-bold text-[#F5F0E8] mb-16"
+            >
+              Built for real PMs
+            </motion.h2>
+
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+              variants={{
+                hidden: {},
+                visible: { transition: { staggerChildren: 0.2 } },
+              }}
+              className="grid grid-cols-1 md:grid-cols-3 gap-12 sm:gap-8 mb-20 max-w-[900px] mx-auto"
+            >
+              {[
+                { title: "Real PM Situations", desc: "Not abstract questions. Immerse yourself in the actual challenges PMs face every day." },
                 { title: "Science-backed Framework", desc: "Built on PM archetypes, psychology dimensions, and product management research." },
                 { title: "Free. Always.", desc: "No login required. Get your full result instantly." }
               ].map((item, i) => (
-                <div key={i} className="flex flex-col items-center">
-                  <span className="text-earth-terracotta text-xl mb-4">✦</span>
-                  <h4 className="text-xl font-bold text-earth-dark mb-3">{item.title}</h4>
-                  <p className="text-earth-muted leading-relaxed max-w-[260px]">{item.desc}</p>
-                </div>
+                <motion.div
+                  key={i}
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    visible: { opacity: 1, y: 0 },
+                  }}
+                  className="flex flex-col items-center"
+                >
+                  <span className="text-[#C45C3A] text-xl mb-4">✦</span>
+                  <h4 className="text-xl font-bold text-[#F5F0E8] mb-3">{item.title}</h4>
+                  <p className="text-[#8A8480] leading-relaxed max-w-[260px]">{item.desc}</p>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
 
-            <p className="text-sm font-bold text-earth-muted tracking-wide uppercase">
-              Join <span className="text-earth-terracotta">{sessionCount.toLocaleString()}</span> PMs who already know their nature.
-            </p>
-          </ScrollReveal>
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="text-sm font-bold text-[#8A8480] tracking-wide uppercase"
+            >
+              Join <span className="text-[#C45C3A]">{sessionCount.toLocaleString()}</span> PMs who already know their nature.
+            </motion.p>
+          </div>
         </section>
 
+        {/* SECTION SEPARATOR */}
+        <hr className="w-[80%] max-w-[1100px] mx-auto border-t border-[#1E1A17] my-0 relative z-10 relative" />
+
         {/* --- SECTION 7: FINAL CTA BANNER --- */}
-        <section className="py-24 sm:py-32 bg-earth-terracotta w-full text-center selection:bg-white selection:text-earth-terracotta">
-          <ScrollReveal className="max-w-[800px] mx-auto px-6">
-            <h2 className="text-4xl sm:text-[56px] font-serif font-bold text-white mb-6 leading-tight">
+        <section className="relative w-full h-[60vh] sm:h-[70vh] flex items-center justify-center overflow-hidden bg-transparent z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="relative z-20 max-w-[800px] mx-auto px-6 text-center pointer-events-auto"
+          >
+            <h2 className="text-4xl sm:text-[64px] font-serif font-bold text-[#F5F0E8] mb-6 leading-tight drop-shadow-xl">
               Ready to know your PM nature?
             </h2>
-            <p className="text-lg sm:text-xl text-white/80 mb-12">
+            <p className="text-lg sm:text-xl text-[#F5F0E8]/80 mb-12 drop-shadow-md">
               Takes 10–15 minutes. Free. No login required.
             </p>
             <Link
               href="/test"
-              className="group inline-flex h-14 sm:h-16 items-center justify-center rounded-full bg-white px-10 font-bold text-earth-terracotta transition-all hover:bg-earth-cream hover:scale-105 shadow-xl text-base sm:text-lg"
+              className="group inline-flex h-14 sm:h-16 items-center justify-center rounded-full bg-[#F5F0E8] px-10 font-bold text-[#0A0A0A] transition-all hover:bg-white hover:scale-105 shadow-[0_0_30px_rgba(255,255,255,0.2)] text-base sm:text-lg"
             >
               Take the Orlog Test <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1">→</span>
             </Link>
-          </ScrollReveal>
+          </motion.div>
         </section>
       </main>
 
+      {/* SECTION SEPARATOR */}
+      <hr className="w-[80%] max-w-[1100px] mx-auto border-t border-[#1E1A17] my-0 relative z-10 relative" />
+
       {/* --- SECTION 8: FOOTER --- */}
-      <footer className="w-full bg-earth-cream border-t border-earth-border py-8 mt-auto">
+      <footer className="w-full bg-transparent py-8 mt-auto z-10 relative">
         <div className="max-w-[1100px] mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3 text-center sm:text-left">
-            <span className="text-xl font-serif text-earth-dark font-bold tracking-tight">Orlog</span>
-            <span className="hidden sm:inline text-earth-border">|</span>
-            <span className="text-sm text-earth-muted font-medium">Know your PM nature.</span>
+            <span className="text-xl font-serif text-[#F5F0E8] font-bold tracking-tight">Orlog</span>
+            <span className="hidden sm:inline text-[#2A2A2A]">|</span>
+            <span className="text-sm text-[#8A8480] font-medium">Know your PM nature.</span>
           </div>
-          <div className="text-sm text-earth-muted/60 font-medium">
+          <div className="text-sm text-[#8A8480]/60 font-medium">
             © {new Date().getFullYear()} Orlog
           </div>
         </div>

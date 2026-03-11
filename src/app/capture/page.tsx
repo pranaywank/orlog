@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { PM_TYPES } from "@/constants/types";
+import { Spotlight } from "@/components/ui/spotlight";
+import * as motion from "motion/react-client";
 
 export const dynamic = 'force-dynamic'; // Prevent static prerendering issues
 
@@ -20,6 +22,7 @@ function CaptureContent() {
     const [secondaryType, setSecondaryType] = useState<string | null>(null);
     const [hybridName, setHybridName] = useState<string | null>(null);
     const [dimensionScores, setDimensionScores] = useState<any>(null);
+    const [success, setSuccess] = useState(false);
 
     // Validate presence of required URL parameters
     useEffect(() => {
@@ -29,7 +32,6 @@ function CaptureContent() {
         const scores = searchParams.get("scores");
 
         if (!primary || !secondary) {
-            // Redirect to test if no results are found in URL
             router.push("/test");
             return;
         }
@@ -77,7 +79,10 @@ function CaptureContent() {
             });
 
             // Success — navigate to result page using the new doc ID
-            router.push(`/result/${docRef.id}`);
+            setSuccess(true);
+            setTimeout(() => {
+                router.push(`/result/${docRef.id}`);
+            }, 600); // Wait for transition
         } catch (err: any) {
             console.error("Firebase Error:", err);
             setError(err.message || "Something went wrong. Please try again.");
@@ -85,47 +90,45 @@ function CaptureContent() {
         }
     };
 
-    // Prevent flash of content before redirecting if missing params
     if (!primaryType || !secondaryType) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans selection:bg-black selection:text-white">
-                <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-black"></div>
+            <div className="flex min-h-screen items-center justify-center bg-[#0A0A0A] font-sans">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#2A2A2A] border-t-[#C45C3A]"></div>
             </div>
         );
     }
 
-    const primaryData = PM_TYPES[primaryType as keyof typeof PM_TYPES];
-    const secondaryData = PM_TYPES[secondaryType as keyof typeof PM_TYPES];
-
-    const primaryTitle = primaryData ? `${primaryData.name} — ${primaryData.subtitle} ` : `The ${primaryType} `;
-    const secondaryTitle = secondaryData ? `${secondaryData.name} — ${secondaryData.subtitle} ` : `The ${secondaryType} `;
-
     return (
-        <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans selection:bg-black selection:text-white px-6 py-12">
-            <div className="w-full max-w-lg bg-white p-8 sm:p-12 rounded-3xl shadow-sm border border-zinc-200 animate-in fade-in zoom-in-95 duration-500 text-center">
-                <div className="mb-10 mt-4 text-center">
-                    <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-zinc-100 mb-6">
-                        <span className="text-xl">🔮</span>
-                    </div>
-                    <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-black mb-3">
-                        Your results are ready
-                    </h1>
-                    <p className="text-base sm:text-lg text-zinc-500 font-medium leading-relaxed">
-                        Find out your PM personality type along with your strengths, blind spots, and how to leverage them.
+        <motion.div
+            initial={{ opacity: 1, scale: 1 }}
+            animate={success ? { opacity: 0, scale: 0.95 } : { opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="flex min-h-screen items-center justify-center bg-[#0A0A0A] font-sans selection:bg-[#C45C3A] selection:text-white px-6 py-12 relative overflow-hidden"
+        >
+            <Spotlight className="-top-40 left-0 md:left-60 md:-top-20 opacity-30" fill="#C45C3A" />
+            
+            <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={{ hidden: { y: 30 }, visible: { y: 0, transition: { staggerChildren: 0.15 } } }}
+                className="w-full max-w-lg bg-[#111111] p-8 sm:p-12 rounded-3xl shadow-[0_0_20px_rgba(196,92,58,0.2)] border border-[#C45C3A] text-center z-10"
+            >
+                <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="mb-10 mt-4 text-center">
+                    <p className="text-xs font-bold tracking-[0.2em] text-[#C45C3A] uppercase mb-4">
+                        ALMOST THERE
                     </p>
-                </div>
-                <div className="text-center mb-10">
-                    <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-black mb-3">
+                    <h1 className="text-3xl sm:text-4xl font-serif font-bold tracking-tight text-[#F5F0E8] mb-3">
                         One last step before your results
-                    </h2>
-                    <p className="text-zinc-500 text-sm sm:text-base leading-relaxed">
-                        We'll use this to personalize your results.
+                    </h1>
+                    <p className="text-base sm:text-lg text-[#8A8480] font-medium leading-relaxed">
+                        Where should we send your PM personality report?
                     </p>
-                </div>
+                </motion.div>
 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-                    <div className="flex flex-col gap-2 relative">
-                        <label htmlFor="name" className="text-sm font-medium text-zinc-700 ml-1">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-6 text-left">
+                    <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="flex flex-col gap-2 relative group layout">
+                        <label htmlFor="name" className="text-sm font-medium text-[#F5F0E8] ml-1">
                             Your Name
                         </label>
                         <input
@@ -133,14 +136,21 @@ function CaptureContent() {
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            disabled={loading}
+                            disabled={loading || success}
                             placeholder="e.g. Avery PM"
-                            className="w-full rounded-xl border border-zinc-300 bg-zinc-50 px-4 py-3.5 text-black placeholder:text-zinc-400 focus:border-black focus:bg-white focus:outline-none focus:ring-1 focus:ring-black disabled:opacity-50 transition-colors"
+                            className="w-full rounded-xl border border-[#2A2A2A] bg-[#1A1A1A] px-4 py-3.5 text-[#F5F0E8] placeholder:text-[#4A4540] focus:border-[#C45C3A] focus:outline-none focus:ring-1 focus:ring-[#C45C3A] disabled:opacity-50 transition-colors relative z-10"
                         />
-                    </div>
+                        <motion.div 
+                            className="absolute -inset-[2px] rounded-[14px] opacity-0 group-focus-within:opacity-100 bg-gradient-to-r from-[#C45C3A]/40 to-transparent blur-sm -z-0"
+                            layoutId="name-glow"
+                            initial={{ opacity: 0 }}
+                            whileFocus={{ opacity: 1 }}
+                            transition={{ duration: 0.3 }}
+                        />
+                    </motion.div>
 
-                    <div className="flex flex-col gap-2 relative">
-                        <label htmlFor="email" className="text-sm font-medium text-zinc-700 ml-1">
+                    <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="flex flex-col gap-2 relative group layout">
+                        <label htmlFor="email" className="text-sm font-medium text-[#F5F0E8] ml-1">
                             Work Email
                         </label>
                         <input
@@ -148,40 +158,50 @@ function CaptureContent() {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            disabled={loading}
+                            disabled={loading || success}
                             placeholder="you@company.com"
-                            className="w-full rounded-xl border border-zinc-300 bg-zinc-50 px-4 py-3.5 text-black placeholder:text-zinc-400 focus:border-black focus:bg-white focus:outline-none focus:ring-1 focus:ring-black disabled:opacity-50 transition-colors"
+                            className="w-full rounded-xl border border-[#2A2A2A] bg-[#1A1A1A] px-4 py-3.5 text-[#F5F0E8] placeholder:text-[#4A4540] focus:border-[#C45C3A] focus:outline-none focus:ring-1 focus:ring-[#C45C3A] disabled:opacity-50 transition-colors relative z-10"
                         />
-                    </div>
-
-                    {error && (
-                        <div className="px-4 py-3 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm font-medium animate-in slide-in-from-top-2 duration-300">
-                            {error}
-                        </div>
-                    )}
-
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="group relative mt-4 flex w-full items-center justify-center rounded-ull bg-black px-6 py-4 text-sm sm:text-base font-medium text-white transition-all hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:opacity-70 disabled:hover:bg-black rounded-full"
-                    >
-                        {loading ? (
-                            <span className="flex items-center gap-2">
-                                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                            </span>
-                        ) : (
-                            <span className="flex items-center gap-2">
-                                Show My Results
-                                <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
-                            </span>
+                        <motion.div 
+                            className="absolute -inset-[2px] rounded-[14px] opacity-0 group-focus-within:opacity-100 bg-gradient-to-r from-[#C45C3A]/40 to-transparent blur-sm -z-0"
+                            layoutId="email-glow"
+                            initial={{ opacity: 0 }}
+                            whileFocus={{ opacity: 1 }}
+                            transition={{ duration: 0.3 }}
+                        />
+                        {error && (
+                            <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-red-500/80 text-sm font-medium mt-1 ml-1">
+                                {error}
+                            </motion.p>
                         )}
-                    </button>
+                    </motion.div>
+
+                    <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
+                        <motion.button
+                            type="submit"
+                            disabled={loading || success}
+                            whileHover={{ scale: 1.02, filter: "brightness(1.1)" }}
+                            whileTap={{ scale: 0.98 }}
+                            className="group relative mt-4 flex w-full items-center justify-center rounded-full bg-[#C45C3A] px-6 py-4 text-sm sm:text-base font-bold text-white transition-all shadow-lg shadow-[#C45C3A]/20 focus:outline-none focus:ring-2 focus:ring-[#C45C3A] focus:ring-offset-2 focus:ring-offset-[#111111] disabled:opacity-70 disabled:hover:scale-100 disabled:hover:filter-none"
+                        >
+                            {loading ? (
+                                <span className="flex items-center gap-2">
+                                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </span>
+                            ) : (
+                                <span className="flex items-center gap-2">
+                                    Show My Results
+                                    <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                                </span>
+                            )}
+                        </motion.button>
+                    </motion.div>
                 </form>
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     );
 }
 
@@ -190,8 +210,8 @@ import { Suspense } from 'react';
 export default function CapturePage() {
     return (
         <Suspense fallback={
-            <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans">
-                <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-black"></div>
+            <div className="flex min-h-screen items-center justify-center bg-[#0A0A0A] font-sans">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#2A2A2A] border-t-[#C45C3A]"></div>
             </div>
         }>
             <CaptureContent />

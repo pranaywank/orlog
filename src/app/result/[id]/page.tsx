@@ -5,6 +5,10 @@ import { useParams, useRouter } from "next/navigation";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { PM_TYPES } from "@/constants/types";
+import { TracingBeam } from "@/components/ui/tracing-beam";
+import { SparklesCore } from "@/components/ui/sparkles";
+import * as motion from "motion/react-client";
+import { AnimatePresence } from "motion/react";
 
 interface SessionData {
     name: string;
@@ -24,6 +28,7 @@ export default function ResultPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [copied, setCopied] = useState(false);
+    const [isGeneratingCard, setIsGeneratingCard] = useState(false);
 
     useEffect(() => {
         async function fetchSession() {
@@ -53,37 +58,89 @@ export default function ResultPage() {
         fetchSession();
     }, [params?.id]);
 
+    const primaryTypeKey = data?.primary_type as keyof typeof PM_TYPES;
+    const secondaryTypeKey = data?.secondary_type as keyof typeof PM_TYPES;
+    const primaryData = PM_TYPES[primaryTypeKey];
+    const secondaryData = PM_TYPES[secondaryTypeKey];
+
+    const primaryName = primaryData?.name || (data ? `The ${data.primary_type}` : "");
+    const primarySubtitle = primaryData?.subtitle || "";
+    const secondaryName = secondaryData?.name || (data ? `The ${data.secondary_type}` : "");
+    const secondarySubtitle = secondaryData?.subtitle || "";
+
+    const getLinkedInText = () => {
+        if (!data) return "";
+        return `I just took the Orlog PM Personality Test and here's what I found out about myself.\n\n🧭 My PM Type: ${data.hybrid_name}\n${primaryName} (${primarySubtitle}) × ${secondaryName} (${secondarySubtitle})\n\nIt's a 15-minute experiential test — 30 real product scenarios that reveal how you actually think, decide, and lead as a PM.\n\nCurious what type you are? Find out here:\norlog.fourg.dev`;
+    };
+
+    const getTwitterText = () => {
+        if (!data) return "";
+        return `Just discovered I'm ${data.hybrid_name} on @OrlogPM — ${primaryName} × ${secondaryName}.\n\nA PM personality test built on real product scenarios, not abstract questions.\n\nFind out your type 👇`;
+    };
+
     const handleCopy = async () => {
-        if (!data) return;
-
-        const url = window.location.href;
-        const shareText = `I just discovered I'm ${data.hybrid_name} on Orlog.\nMy PM type: ${primaryData?.name} (${primaryData?.subtitle}) × ${secondaryData?.name} (${secondaryData?.subtitle}).\nFind out your PM personality → orlog.app\n\n${url}`;
-
         try {
-            await navigator.clipboard.writeText(shareText);
+            await navigator.clipboard.writeText(`https://orlog.fourg.dev/result/${params?.id}`);
             setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
+            setTimeout(() => setCopied(false), 3000);
         } catch (err) {
             console.error("Failed to copy", err);
         }
     };
 
+    const handleLinkedInShare = async () => {
+        try {
+            await navigator.clipboard.writeText(getLinkedInText());
+            const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://orlog.fourg.dev/result/${params?.id}`)}`;
+            window.open(url, '_blank', 'noopener,noreferrer');
+        } catch (err) {
+            console.error("Failed to copy to clipboard for LinkedIn", err);
+        }
+    };
+
+    const handleTwitterShare = () => {
+        const text = getTwitterText();
+        const url = `https://orlog.fourg.dev/result/${params?.id}`;
+        const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+        window.open(tweetUrl, '_blank', 'noopener,noreferrer');
+    };
+
+    const downloadCard = async () => {
+        setIsGeneratingCard(true);
+        try {
+            const html2canvas = (await import('html2canvas')).default;
+            const element = document.getElementById("share-card-container");
+            if (element) {
+                const canvas = await html2canvas(element, { scale: 2, useCORS: true, backgroundColor: "#FAF8F4" });
+                const url = canvas.toDataURL("image/png");
+                const link = document.createElement("a");
+                link.download = `orlog-result-${data?.hybrid_name?.toLowerCase().replace(/\s+/g, '-')}.png`;
+                link.href = url;
+                link.click();
+            }
+        } catch (err) {
+            console.error("Error generating static card:", err);
+        } finally {
+            setIsGeneratingCard(false);
+        }
+    };
+
     if (loading) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-earth-cream">
-                <div className="h-8 w-8 animate-spin rounded-full border-4 border-earth-border border-t-earth-terracotta"></div>
+            <div className="flex min-h-screen items-center justify-center bg-[#FAF8F4]">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#E2DFD8] border-t-[#C45C3A]"></div>
             </div>
         );
     }
 
     if (error || !data) {
         return (
-            <div className="flex min-h-screen flex-col items-center justify-center bg-earth-cream px-6 font-sans text-center">
-                <h2 className="text-2xl font-serif font-semibold text-earth-dark mb-4">We couldn't find your results.</h2>
-                <p className="text-earth-muted mb-8 max-w-sm">Try taking the test again to discover your PM nature.</p>
+            <div className="flex min-h-screen flex-col items-center justify-center bg-[#FAF8F4] px-6 font-sans text-center">
+                <h2 className="text-2xl font-serif font-semibold text-[#2C2A28] mb-4">We couldn't find your results.</h2>
+                <p className="text-[#8A8480] mb-8 max-w-sm">Try taking the test again to discover your PM nature.</p>
                 <button
                     onClick={() => router.push("/test")}
-                    className="group inline-flex h-12 items-center justify-center rounded-full bg-earth-dark px-8 font-medium text-white transition-all hover:bg-black"
+                    className="group inline-flex h-12 items-center justify-center rounded-full bg-[#2C2A28] px-8 font-medium text-white transition-all hover:bg-black"
                 >
                     Retake Test <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
                 </button>
@@ -91,200 +148,408 @@ export default function ResultPage() {
         );
     }
 
-    const primaryTypeKey = data.primary_type as keyof typeof PM_TYPES;
-    const secondaryTypeKey = data.secondary_type as keyof typeof PM_TYPES;
-    const primaryData = PM_TYPES[primaryTypeKey];
-    const secondaryData = PM_TYPES[secondaryTypeKey];
-
-    const primaryName = primaryData?.name || `The ${data.primary_type}`;
-    const primarySubtitle = primaryData?.subtitle || "";
     const primaryDesc = primaryData?.description || "";
-
-    const secondaryName = secondaryData?.name || `The ${data.secondary_type}`;
-    const secondarySubtitle = secondaryData?.subtitle || "";
     const secondaryDesc = secondaryData?.description || "";
 
     return (
-        <div className="flex min-h-screen flex-col items-center bg-earth-cream font-sans selection:bg-earth-terracotta selection:text-white pb-24">
+        <div data-theme="light" className="min-h-screen bg-[#FAF8F4] font-sans selection:bg-[#C45C3A] selection:text-white pb-32 overflow-hidden relative">
+
+            {/* Custom Toast Notification inside page to prevent fixed layout issues, using fixed overlay */}
+            <AnimatePresence>
+                {copied && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                        transition={{ duration: 0.3 }}
+                        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-[#2C2A28] text-white px-6 py-3 rounded-full shadow-xl flex items-center gap-3 font-medium text-sm"
+                    >
+                        <div className="bg-[#4A7C6F] rounded-full p-1">
+                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        Link copied! Share it anywhere → the preview will show your result card.
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Top Border Accent */}
-            <div className="w-full h-[3px] bg-earth-terracotta absolute top-0 left-0"></div>
+            <div className="w-full h-[3px] bg-[#C45C3A] absolute top-0 left-0 z-50"></div>
 
-            <div className="w-full max-w-[900px] px-6 pt-16 sm:pt-24 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both">
+            {/* Content Wrapper */}
+            <TracingBeam className="px-6 md:px-0 mt-16 sm:mt-24">
+                <div className="w-full max-w-[900px] mx-auto px-1 sm:px-6">
 
-                {/* --- SECTION 1: HERO --- */}
-                <section className="text-center mb-24 relative">
-                    {/* Subtle gradient behind hero text */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-earth-terracotta/5 to-transparent -z-10 rounded-[100px] blur-3xl opacity-50 block md:hidden"></div>
+                    {/* --- SECTION 1: HERO --- */}
+                    <section className="text-center mb-24 relative pt-4">
+                        <div className="absolute inset-0 bg-gradient-to-b from-[#C45C3A]/5 to-transparent -z-10 rounded-[100px] blur-3xl opacity-50 block md:hidden"></div>
 
-                    <p className="text-xs sm:text-sm font-bold tracking-[0.2em] text-earth-terracotta uppercase mb-6">
-                        Your Orlog Result
-                    </p>
-                    <h2 className="text-2xl sm:text-3xl font-serif text-earth-dark mb-2">
-                        {data.name}, you are…
-                    </h2>
+                        <motion.p 
+                            initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
+                            className="text-xs sm:text-sm font-bold tracking-[0.2em] text-[#C45C3A] uppercase mb-6"
+                        >
+                            Your Orlog Result
+                        </motion.p>
+                        
+                        <motion.h2 
+                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.1 }}
+                            className="text-2xl sm:text-3xl font-serif text-[#2C2A28] mb-2"
+                        >
+                            {data.name}, you are…
+                        </motion.h2>
 
-                    <div className="relative inline-block mb-1">
-                        <h1 className="text-[48px] sm:text-[64px] font-serif font-bold text-earth-dark leading-tight relative z-10">
-                            {primaryName}
-                        </h1>
-                        <span className="absolute bottom-2 sm:bottom-4 left-0 w-full h-3 sm:h-4 bg-earth-terracotta/20 -z-0"></span>
-                    </div>
-
-                    {primarySubtitle && (
-                        <p className="text-xl sm:text-2xl font-serif italic text-earth-muted mb-6">
-                            {primarySubtitle}
-                        </p>
-                    )}
-
-                    <p className="text-lg sm:text-xl font-medium text-earth-dark mb-10 font-serif italic">
-                        with traits of {secondaryName}{secondarySubtitle ? ` — ${secondarySubtitle}` : ""}
-                    </p>
-
-                    <div className="flex flex-col items-center gap-4">
-                        <div className="inline-flex items-center justify-center px-6 py-2 rounded-full bg-earth-sage text-white font-semibold text-sm sm:text-base tracking-wide shadow-sm">
-                            {data.hybrid_name}
+                        <div className="relative inline-block mb-1">
+                            <motion.h1 
+                                initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+                                className="text-[48px] sm:text-[64px] font-serif font-bold text-[#2C2A28] leading-tight relative z-10"
+                            >
+                                {primaryName}
+                            </motion.h1>
+                            <motion.span 
+                                initial={{ width: 0 }} animate={{ width: "100%" }} transition={{ duration: 1, delay: 0.5, ease: "circOut" }}
+                                className="absolute bottom-2 sm:bottom-4 left-0 h-3 sm:h-4 bg-[#C45C3A]/20 -z-0"
+                            ></motion.span>
                         </div>
-                        <p className="text-earth-dark font-medium max-w-md mx-auto text-sm sm:text-base">
-                            {primaryDesc.split('.')[0]}.
-                        </p>
-                    </div>
-                </section>
 
-                {/* --- SECTION 2: RADAR CHART --- */}
-                <section className="mb-24 flex flex-col items-center">
-                    <h2 className="text-3xl font-serif font-bold text-earth-dark mb-8 text-center">Your PM Signature</h2>
-                    <PMRadarChart scores={data.dimension_scores} />
-                </section>
-
-                {/* --- SECTION 3: TYPE DESCRIPTION CARDS --- */}
-                <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
-                    {/* Primary Card */}
-                    <div className="bg-earth-card p-8 sm:p-10 rounded-2xl border border-earth-border shadow-sm border-l-4 border-l-earth-terracotta flex flex-col">
-                        <span className="text-xs font-bold tracking-widest text-earth-terracotta uppercase mb-4">Primary Type</span>
-                        <h3 className="text-3xl font-serif font-bold text-earth-dark mb-1">{primaryName}</h3>
-                        <p className="text-lg font-serif italic text-earth-muted mb-6">{primarySubtitle}</p>
-                        <p className="text-earth-dark leading-relaxed mb-8 flex-grow">
-                            {primaryDesc}
-                        </p>
-                        <div>
-                            <span className="text-sm font-bold uppercase tracking-wider text-earth-muted mb-3 block">Strengths</span>
-                            <ul className="space-y-2">
-                                {(primaryData?.strengths || []).map((strength, i) => (
-                                    <li key={i} className="flex items-start gap-2 text-earth-dark text-sm sm:text-base">
-                                        <span className="text-earth-terracotta mt-0.5">•</span> {strength}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-
-                    {/* Secondary Card */}
-                    <div className="bg-earth-card p-8 sm:p-10 rounded-2xl border border-earth-border shadow-sm border-l-4 border-l-earth-sage flex flex-col">
-                        <span className="text-xs font-bold tracking-widest text-earth-sage uppercase mb-4">Secondary Type</span>
-                        <h3 className="text-3xl font-serif font-bold text-earth-dark mb-1">{secondaryName}</h3>
-                        <p className="text-lg font-serif italic text-earth-muted mb-6">{secondarySubtitle}</p>
-                        <p className="text-earth-dark leading-relaxed mb-8 flex-grow">
-                            {secondaryDesc}
-                        </p>
-                        <div>
-                            <span className="text-sm font-bold uppercase tracking-wider text-earth-muted mb-3 block">Strengths</span>
-                            <ul className="space-y-2">
-                                {(secondaryData?.strengths || []).map((strength, i) => (
-                                    <li key={i} className="flex items-start gap-2 text-earth-dark text-sm sm:text-base">
-                                        <span className="text-earth-sage mt-0.5">•</span> {strength}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-
-                {/* --- SECTION 4: THE PM SPECTRUM --- */}
-                <section className="mb-24">
-                    <h2 className="text-3xl font-serif font-bold text-earth-dark mb-8 text-center">The PM Spectrum</h2>
-                    <div className="flex overflow-x-auto pb-4 gap-4 snap-x snap-mandatory hide-scrollbars md:grid md:grid-cols-3 md:gap-6 md:overflow-visible">
-                        {Object.values(PM_TYPES).map((type) => {
-                            const key = type.key;
-                            const isPrimary = key === data.primary_type;
-                            const isSecondary = key === data.secondary_type;
-
-                            let borderClass = "border-earth-border opacity-60";
-                            let badge = null;
-                            let circleBg = "bg-earth-muted text-white";
-
-                            if (isPrimary) {
-                                borderClass = "border-earth-terracotta border-2 opacity-100 shadow-sm";
-                                circleBg = "bg-earth-terracotta text-white";
-                                badge = <span className="absolute -top-3 right-4 bg-earth-terracotta text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full">That's you</span>;
-                            } else if (isSecondary) {
-                                borderClass = "border-earth-sage border-2 opacity-100 shadow-sm";
-                                circleBg = "bg-earth-sage text-white";
-                                badge = <span className="absolute -top-3 right-4 bg-earth-sage text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full">Your Secondary</span>;
-                            }
-
-                            return (
-                                <div key={key} className={`bg-earth-card p-6 rounded-2xl border relative flex-shrink-0 w-[260px] md:w-auto snap-center flex flex-col items-center text-center transition-opacity ${borderClass}`}>
-                                    {badge}
-                                    <div className={`w-12 h-12 rounded-full flex items-center justify-center font-serif font-bold text-xl mb-4 ${circleBg}`}>
-                                        {type.name.replace("The ", "").charAt(0)}
-                                    </div>
-                                    <h4 className="font-serif font-bold text-earth-dark text-xl mb-0">{type.name}</h4>
-                                    <p className="text-sm font-serif italic text-earth-muted mb-3">{type.subtitle}</p>
-                                    <p className="text-sm text-earth-dark/80 leading-relaxed font-medium">
-                                        {type.tagline}
-                                    </p>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </section>
-
-                {/* --- SECTION 5: FAMOUS ARCHETYPES --- */}
-                <section className="mb-32">
-                    <h2 className="text-3xl font-serif font-bold text-earth-dark mb-8 text-center">You're in Good Company</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {(primaryData?.famousPMs || []).map((person, i) => (
-                            <div key={i} className="bg-earth-card p-6 rounded-2xl border border-earth-border shadow-sm hover:shadow-md transition-shadow">
-                                <h4 className="font-serif font-bold text-earth-dark text-xl mb-1">{person.name}</h4>
-                                <p className="text-earth-muted text-sm font-medium mb-3 uppercase tracking-wider">{person.company}</p>
-                                <p className="text-earth-dark text-sm leading-relaxed">
-                                    "{person.note}"
-                                </p>
-                            </div>
-                        ))}
-                    </div>
-                </section>
-
-                {/* --- SECTION 6: SHARE & RETAKE --- */}
-                <section className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 border-t border-earth-border pt-12">
-                    <button
-                        onClick={handleCopy}
-                        className="group relative flex h-14 w-full sm:w-auto min-w-[240px] items-center justify-center rounded-xl bg-earth-terracotta px-8 font-medium text-white transition-all hover:bg-[#A34B2E] focus:outline-none focus:ring-2 focus:ring-earth-terracotta focus:ring-offset-2 shadow-sm"
-                    >
-                        {copied ? (
-                            <span className="flex items-center gap-2">
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                                </svg>
-                                Copied to clipboard!
-                            </span>
-                        ) : (
-                            <span className="flex items-center gap-2">
-                                Share My Result <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </span>
+                        {primarySubtitle && (
+                            <motion.p 
+                                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.4 }}
+                                className="text-xl sm:text-2xl font-serif italic text-[#8A8480] mb-6"
+                            >
+                                {primarySubtitle}
+                            </motion.p>
                         )}
-                    </button>
 
-                    <button
-                        onClick={() => router.push("/test")}
-                        className="flex h-14 w-full sm:w-auto min-w-[200px] items-center justify-center rounded-xl bg-transparent border-2 border-earth-sage px-8 font-medium text-earth-sage transition-all hover:bg-earth-sage hover:text-white focus:outline-none focus:ring-2 focus:ring-earth-sage focus:ring-offset-2"
+                        <motion.p 
+                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.7 }}
+                            className="text-lg sm:text-xl font-medium text-[#2C2A28] mb-10 font-serif italic"
+                        >
+                            with traits of {secondaryName}{secondarySubtitle ? ` — ${secondarySubtitle}` : ""}
+                        </motion.p>
+
+                        <div className="flex flex-col items-center gap-4">
+                            <motion.div 
+                                initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.9 }}
+                                className="inline-flex items-center justify-center px-6 py-2 rounded-full bg-[#4A7C6F] text-white font-semibold text-sm sm:text-base tracking-wide shadow-sm"
+                            >
+                                {data.hybrid_name}
+                            </motion.div>
+                            <motion.p 
+                                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 1.1 }}
+                                className="text-[#2C2A28] font-medium max-w-md mx-auto text-sm sm:text-base"
+                            >
+                                {primaryDesc.split('.')[0]}.
+                            </motion.p>
+                        </div>
+                    </section>
+
+                    {/* --- SECTION 2: RADAR CHART --- */}
+                    <motion.section 
+                        initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.8 }}
+                        className="mb-24 flex flex-col items-center relative"
                     >
-                        Retake Test
-                    </button>
-                </section>
+                        {/* CSS Glow behind the radar container for the primary spike emphasis */}
+                        <div className="absolute inset-0 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-[#C45C3A]/10 rounded-full blur-3xl animate-pulse -z-10"></div>
+                        <h2 className="text-3xl font-serif font-bold text-[#2C2A28] mb-8 text-center">Your PM Signature</h2>
+                        <PMRadarChart scores={data.dimension_scores} />
+                    </motion.section>
 
-            </div>
+                    {/* --- SECTION 3: TYPE DESCRIPTION CARDS --- */}
+                    <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+                        {/* Primary Card */}
+                        <motion.div 
+                            initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.6 }}
+                            whileHover={{ y: -4, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)" }}
+                            className="bg-white p-8 sm:p-10 rounded-2xl border border-[#E2DFD8] shadow-sm border-l-4 border-l-[#C45C3A] flex flex-col transition-shadow"
+                        >
+                            <span className="text-xs font-bold tracking-widest text-[#C45C3A] uppercase mb-4">Primary Type</span>
+                            <h3 className="text-3xl font-serif font-bold text-[#2C2A28] mb-1">{primaryName}</h3>
+                            <p className="text-lg font-serif italic text-[#8A8480] mb-6">{primarySubtitle}</p>
+                            <p className="text-[#2C2A28] leading-relaxed mb-8 flex-grow">
+                                {primaryDesc}
+                            </p>
+                            <div>
+                                <span className="text-sm font-bold uppercase tracking-wider text-[#8A8480] mb-3 block">Strengths</span>
+                                <ul className="space-y-2">
+                                    {(primaryData?.strengths || []).map((strength, i) => (
+                                        <li key={i} className="flex items-start gap-2 text-[#2C2A28] text-sm sm:text-base">
+                                            <span className="text-[#C45C3A] mt-0.5">•</span> {strength}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </motion.div>
+
+                        {/* Secondary Card */}
+                        <motion.div 
+                            initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.6, delay: 0.2 }}
+                            whileHover={{ y: -4, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)" }}
+                            className="bg-white p-8 sm:p-10 rounded-2xl border border-[#E2DFD8] shadow-sm border-l-4 border-l-[#4A7C6F] flex flex-col transition-shadow"
+                        >
+                            <span className="text-xs font-bold tracking-widest text-[#4A7C6F] uppercase mb-4">Secondary Type</span>
+                            <h3 className="text-3xl font-serif font-bold text-[#2C2A28] mb-1">{secondaryName}</h3>
+                            <p className="text-lg font-serif italic text-[#8A8480] mb-6">{secondarySubtitle}</p>
+                            <p className="text-[#2C2A28] leading-relaxed mb-8 flex-grow">
+                                {secondaryDesc}
+                            </p>
+                            <div>
+                                <span className="text-sm font-bold uppercase tracking-wider text-[#8A8480] mb-3 block">Strengths</span>
+                                <ul className="space-y-2">
+                                    {(secondaryData?.strengths || []).map((strength, i) => (
+                                        <li key={i} className="flex items-start gap-2 text-[#2C2A28] text-sm sm:text-base">
+                                            <span className="text-[#4A7C6F] mt-0.5">•</span> {strength}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </motion.div>
+                    </section>
+
+                    {/* --- SECTION 4: THE PM SPECTRUM --- */}
+                    <section className="mb-24">
+                        <motion.h2 
+                            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
+                            className="text-3xl font-serif font-bold text-[#2C2A28] mb-8 text-center"
+                        >
+                            The PM Spectrum
+                        </motion.h2>
+                        <div className="flex overflow-x-auto pb-4 gap-4 snap-x snap-mandatory hide-scrollbars md:grid md:grid-cols-3 md:gap-6 md:overflow-visible">
+                            {Object.values(PM_TYPES).map((type, i) => {
+                                const key = type.key;
+                                const isPrimary = key === data.primary_type;
+                                const isSecondary = key === data.secondary_type;
+
+                                let borderClass = "border-[#E2DFD8] opacity-60";
+                                let badge = null;
+                                let circleBg = "bg-[#D6D3CD] text-white";
+
+                                if (isPrimary) {
+                                    borderClass = "border-[#C45C3A] border-2 opacity-100 shadow-md relative overflow-hidden";
+                                    circleBg = "bg-[#C45C3A] text-white relative z-10";
+                                    badge = (
+                                        <div className="absolute -top-3 right-4 z-20">
+                                            <div className="relative">
+                                                <span className="bg-[#C45C3A] text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full relative z-10">That's you</span>
+                                            </div>
+                                        </div>
+                                    );
+                                } else if (isSecondary) {
+                                    borderClass = "border-[#4A7C6F] border-2 opacity-100 shadow-sm";
+                                    circleBg = "bg-[#4A7C6F] text-white";
+                                    badge = <span className="absolute -top-3 right-4 bg-[#4A7C6F] text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full z-10">Your Secondary</span>;
+                                }
+
+                                return (
+                                    <motion.div 
+                                        key={key} 
+                                        initial={{ opacity: 0, y: 20 }} 
+                                        whileInView={{ opacity: 1, y: 0 }} 
+                                        viewport={{ once: true, margin: "-20px" }} 
+                                        transition={{ duration: 0.4, delay: i * 0.1 }}
+                                        className={`bg-white p-6 rounded-2xl relative flex-shrink-0 w-[260px] md:w-auto snap-center flex flex-col items-center text-center transition-all ${borderClass}`}
+                                    >
+                                        {/* Inject Sparkles globally inside the primary card */}
+                                        {isPrimary && (
+                                            <div className="absolute inset-0 z-0">
+                                                <SparklesCore
+                                                    id={`sparkles-${key}`}
+                                                    background="transparent"
+                                                    minSize={0.6}
+                                                    maxSize={1.4}
+                                                    particleDensity={60}
+                                                    className="w-full h-full"
+                                                    particleColor="#C45C3A"
+                                                />
+                                            </div>
+                                        )}
+
+                                        {badge}
+                                        <div className={`w-12 h-12 rounded-full flex items-center justify-center font-serif font-bold text-xl mb-4 ${circleBg}`}>
+                                            {type.name.replace("The ", "").charAt(0)}
+                                        </div>
+                                        <h4 className="font-serif font-bold text-[#2C2A28] text-xl mb-0 relative z-10">{type.name}</h4>
+                                        <p className="text-sm font-serif italic text-[#8A8480] mb-3 relative z-10">{type.subtitle}</p>
+                                        <p className="text-sm text-[#2C2A28]/80 leading-relaxed font-medium relative z-10">
+                                            {type.tagline}
+                                        </p>
+                                    </motion.div>
+                                );
+                            })}
+                        </div>
+                    </section>
+
+                    {/* --- SECTION 5: FAMOUS ARCHETYPES --- */}
+                    <section className="mb-32">
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
+                            className="flex justify-center mb-6 opacity-80"
+                        >
+                            <svg width="150" height="120" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="200" cy="150" r="100" fill="#FAF8F4" />
+                                <path d="M150 200 L200 120 L250 200 Z" fill="#4A7C6F" fillOpacity="0.8" />
+                                <circle cx="200" cy="110" r="20" fill="#C45C3A" fillOpacity="0.9" />
+                                <circle cx="150" cy="220" r="15" fill="#2C2A28" fillOpacity="0.7" />
+                                <circle cx="250" cy="220" r="15" fill="#2C2A28" fillOpacity="0.7" />
+                                <path d="M130 250 Q200 280 270 250" stroke="#E2DFD8" strokeWidth="4" strokeLinecap="round" />
+                            </svg>
+                        </motion.div>
+                        <motion.h2 
+                            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }}
+                            className="text-3xl font-serif font-bold text-[#2C2A28] mb-8 text-center"
+                        >
+                            You're in Good Company
+                        </motion.h2>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {(primaryData?.famousPMs || []).map((person, i) => (
+                                <motion.div 
+                                    key={i} 
+                                    initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }} 
+                                    whileInView={{ opacity: 1, x: 0 }} 
+                                    viewport={{ once: true, margin: "-50px" }} 
+                                    transition={{ duration: 0.5, delay: i * 0.15 }}
+                                    className="bg-white p-6 rounded-2xl border border-[#E2DFD8] shadow-sm hover:shadow-md transition-shadow relative overflow-hidden"
+                                >
+                                    <div className="absolute top-0 right-0 w-16 h-16 bg-[#F4F1E9] rounded-bl-full -z-0 opacity-50"></div>
+                                    <h4 className="font-serif font-bold text-[#2C2A28] text-xl mb-1 relative z-10">{person.name}</h4>
+                                    <p className="text-[#8A8480] text-sm font-medium mb-3 uppercase tracking-wider relative z-10">{person.company}</p>
+                                    <p className="text-[#2C2A28] text-sm leading-relaxed relative z-10">
+                                        "{person.note}"
+                                    </p>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </section>
+
+                    {/* --- SECTION 6: SHARE & RETAKE --- */}
+                    <motion.section 
+                        initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
+                        className="flex flex-col items-center gap-6 border-t border-[#E2DFD8] pt-16 pb-12"
+                    >
+                        <h3 className="text-2xl sm:text-3xl font-serif font-bold text-[#2C2A28] mb-2">Share your result</h3>
+
+                        {/* Top row buttons */}
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-[800px]">
+                            {/* LinkedIn */}
+                            <motion.button
+                                onClick={handleLinkedInShare}
+                                whileHover={{ scale: 1.03 }}
+                                whileTap={{ scale: 0.97 }}
+                                title="Link opens LinkedIn. Caption copied to clipboard — paste it as your post text."
+                                className="flex h-12 w-full sm:w-auto min-w-[200px] items-center justify-center gap-2 rounded-xl bg-[#C45C3A] px-6 font-medium text-white transition-shadow shadow-md hover:shadow-lg focus:outline-none"
+                            >
+                                <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                </svg>
+                                Share on LinkedIn
+                            </motion.button>
+
+                            {/* Twitter */}
+                            <motion.button
+                                onClick={handleTwitterShare}
+                                whileHover={{ scale: 1.03 }}
+                                whileTap={{ scale: 0.97 }}
+                                className="flex h-12 w-full sm:w-auto min-w-[200px] items-center justify-center gap-2 rounded-xl bg-transparent border-2 border-[#2C2A28] px-6 font-medium text-[#2C2A28] transition-colors focus:outline-none"
+                            >
+                                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                                </svg>
+                                Share on Twitter
+                            </motion.button>
+
+                            {/* Copy Link */}
+                            <motion.button
+                                onClick={handleCopy}
+                                whileHover={{ scale: 1.03 }}
+                                whileTap={{ scale: 0.97 }}
+                                className="flex h-12 w-full sm:w-auto min-w-[200px] items-center justify-center gap-2 rounded-xl bg-transparent border-2 border-[#4A7C6F] px-6 font-medium text-[#4A7C6F] transition-colors focus:outline-none"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                </svg>
+                                Copy Link
+                            </motion.button>
+                        </div>
+
+                        {/* Bottom row button */}
+                        <div className="w-full sm:w-auto mt-2 mb-10">
+                            <motion.button
+                                onClick={downloadCard}
+                                disabled={isGeneratingCard}
+                                whileHover={{ scale: 1.03 }}
+                                whileTap={{ scale: 0.97 }}
+                                className="flex h-12 w-full sm:min-w-[300px] items-center justify-center gap-2 rounded-xl bg-transparent border-2 border-[#4A7C6F] px-6 font-bold text-[#4A7C6F] transition-colors focus:outline-none hover:bg-[#4A7C6F] hover:text-white disabled:opacity-50 disabled:pointer-events-none"
+                            >
+                                {isGeneratingCard ? "Generating…" : "Download Result Card ↓"}
+                            </motion.button>
+                        </div>
+
+                        {/* Retake test small link */}
+                        <button
+                            onClick={() => router.push("/test")}
+                            className="text-sm font-medium text-[#8A8480] hover:text-[#C45C3A] underline underline-offset-4 transition-colors mb-20"
+                        >
+                            Retake Test
+                        </button>
+                    </motion.section>
+
+                    {/* --- HIDDEN HTML2CANVAS CAPTURE TEMPLATE --- */}
+                    {/* Position absolute off-screen but rendered for snapshotting */}
+                    <div style={{ position: "absolute", left: "-9999px", top: "-9999px" }}>
+                        <div id="share-card-container" className="flex flex-col bg-[#FAF8F4]" style={{ width: "1080px", height: "1080px", padding: "80px", fontFamily: "'Inter', sans-serif" }}>
+                            
+                            {/* Top row */}
+                            <div className="flex justify-between items-center w-full mb-20 relative z-10 w-full shrink-0">
+                                <div className="text-3xl font-serif font-black tracking-widest text-[#2C2A28]">ORLOG.</div>
+                                <div className="text-[#8A8480] font-medium text-xl">orlog.fourg.dev</div>
+                            </div>
+                            
+                            {/* Center blocks flex */}
+                            <div className="flex justify-between items-center w-full flex-grow relative z-10">
+                                
+                                {/* Left text content */}
+                                <div className="flex flex-col max-w-[500px]">
+                                    <span className="text-[#C45C3A] font-bold tracking-[0.2em] uppercase text-lg mb-6">PM PERSONALITY TYPE</span>
+                                    
+                                    <h1 className="text-[90px] font-serif font-bold text-[#C45C3A] leading-[1.1] tracking-tight mb-2">
+                                        {primaryName}
+                                    </h1>
+                                    
+                                    <h2 className="text-[36px] font-serif italic text-[#8A8480] mb-8">
+                                        {primarySubtitle}
+                                    </h2>
+                                    
+                                    <p className="text-[#8A8480] text-[22px] font-medium mb-12">
+                                        with traits of {secondaryName} — {secondarySubtitle}
+                                    </p>
+                                    
+                                    <div>
+                                        <div className="inline-flex bg-[#4A7C6F] text-white px-8 py-3 rounded-full text-[26px] font-bold tracking-wide">
+                                            {data.hybrid_name}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {/* Right radar chart */}
+                                <div className="scale-[1.8] transform origin-right w-[300px] h-[300px]">
+                                    <PMRadarChart scores={data.dimension_scores || {}} />
+                                </div>
+                            </div>
+
+                            {/* Bottom row */}
+                            <div className="w-full shrink-0 mt-20 relative z-10 border-t-2 border-[#E2DFD8] pt-12 flex justify-between items-center">
+                                <span className="text-[28px] italic font-serif text-[#8A8480]">Know your PM nature.</span>
+                                <span className="text-[22px] font-medium text-[#8A8480]">Take the test at <strong className="text-[#C45C3A]">orlog.fourg.dev</strong></span>
+                            </div>
+                            
+                            {/* Background decoration */}
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-[#C45C3A]/10 to-[#4A7C6F]/10 rounded-full blur-[100px] -z-0"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </TracingBeam>
         </div>
     );
 }
