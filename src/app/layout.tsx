@@ -13,6 +13,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://orlog.fourg.dev"),
   title: "Orlog | Know your PM nature",
   description: "Orlog is a PM personality test that reveals what kind of product manager you are — and what you could become.",
 };

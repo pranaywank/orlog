@@ -143,7 +143,11 @@ export default function ResultPage() {
                 const link = document.createElement("a");
                 link.download = `orlog-result-${data?.hybrid_name?.toLowerCase().replace(/\s+/g, '-')}.png`;
                 link.href = url;
+                
+                // Append locally for browser compatibility before triggering click download
+                document.body.appendChild(link);
                 link.click();
+                document.body.removeChild(link);
             }
         } catch (err) {
             console.error("Error generating static card:", err);
