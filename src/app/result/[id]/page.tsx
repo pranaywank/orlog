@@ -27,7 +27,7 @@ export default function ResultPage() {
     const [data, setData] = useState<SessionData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
-    const [copied, setCopied] = useState(false);
+    const [copiedText, setCopiedText] = useState<string | null>(null);
     const [isGeneratingCard, setIsGeneratingCard] = useState(false);
 
     useEffect(() => {
@@ -81,8 +81,8 @@ export default function ResultPage() {
     const handleCopy = async () => {
         try {
             await navigator.clipboard.writeText(`https://orlog.fourg.dev/result/${params?.id}`);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 3000);
+            setCopiedText("Link copied! Share it anywhere → the preview will show your result card.");
+            setTimeout(() => setCopiedText(null), 3000);
         } catch (err) {
             console.error("Failed to copy", err);
         }
@@ -91,6 +91,9 @@ export default function ResultPage() {
     const handleLinkedInShare = async () => {
         try {
             await navigator.clipboard.writeText(getLinkedInText());
+            setCopiedText("Caption copied! Paste it as your LinkedIn post.");
+            setTimeout(() => setCopiedText(null), 4000);
+            
             const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://orlog.fourg.dev/result/${params?.id}`)}`;
             window.open(url, '_blank', 'noopener,noreferrer');
         } catch (err) {
@@ -109,9 +112,33 @@ export default function ResultPage() {
         setIsGeneratingCard(true);
         try {
             const html2canvas = (await import('html2canvas')).default;
-            const element = document.getElementById("share-card-container");
-            if (element) {
-                const canvas = await html2canvas(element, { scale: 2, useCORS: true, backgroundColor: "#FAF8F4" });
+            const element = document.getElementById("share-card-wrapper");
+            const container = document.getElementById("share-card-container");
+            
+            if (element && container) {
+                // Temporarily move the element into the viewport but hidden (opacity 0, pointer-events none)
+                element.style.position = "fixed";
+                element.style.left = "0";
+                element.style.top = "0";
+                element.style.zIndex = "-50";
+                element.style.opacity = "1"; // HTML2Canvas needs it to have opacity > 0 to render children correctly sometimes, but we keep it behind everything
+                
+                // Wait a tick for DOM to apply styles
+                await new Promise(resolve => setTimeout(resolve, 100));
+
+                const canvas = await html2canvas(container, { 
+                    scale: 2, 
+                    useCORS: true, 
+                    backgroundColor: "#FAF8F4",
+                    logging: false
+                });
+                
+                // Put it back off-screen immediately
+                element.style.position = "absolute";
+                element.style.left = "-9999px";
+                element.style.top = "-9999px";
+                element.style.zIndex = "auto";
+
                 const url = canvas.toDataURL("image/png");
                 const link = document.createElement("a");
                 link.download = `orlog-result-${data?.hybrid_name?.toLowerCase().replace(/\s+/g, '-')}.png`;
@@ -156,20 +183,20 @@ export default function ResultPage() {
 
             {/* Custom Toast Notification inside page to prevent fixed layout issues, using fixed overlay */}
             <AnimatePresence>
-                {copied && (
+                {copiedText && (
                     <motion.div
                         initial={{ opacity: 0, y: 50, scale: 0.9 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
                         transition={{ duration: 0.3 }}
-                        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-[#2C2A28] text-white px-6 py-3 rounded-full shadow-xl flex items-center gap-3 font-medium text-sm"
+                        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-[#2C2A28] text-white px-6 py-3 rounded-full shadow-xl flex flex-col sm:flex-row items-center sm:gap-3 font-medium text-sm w-[90%] sm:w-auto text-center sm:text-left gap-1"
                     >
-                        <div className="bg-[#4A7C6F] rounded-full p-1">
+                        <div className="bg-[#4A7C6F] rounded-full p-1 hidden sm:block shrink-0">
                             <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
                             </svg>
                         </div>
-                        Link copied! Share it anywhere → the preview will show your result card.
+                        {copiedText}
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -496,55 +523,55 @@ export default function ResultPage() {
 
                     {/* --- HIDDEN HTML2CANVAS CAPTURE TEMPLATE --- */}
                     {/* Position absolute off-screen but rendered for snapshotting */}
-                    <div style={{ position: "absolute", left: "-9999px", top: "-9999px" }}>
-                        <div id="share-card-container" className="flex flex-col bg-[#FAF8F4]" style={{ width: "1080px", height: "1080px", padding: "80px", fontFamily: "'Inter', sans-serif" }}>
+                    <div id="share-card-wrapper" style={{ position: "absolute", left: "-9999px", top: "-9999px" }}>
+                        <div id="share-card-container" style={{ display: "flex", flexDirection: "column", backgroundColor: "#FAF8F4", width: "1080px", height: "1080px", padding: "80px", fontFamily: "'Inter', sans-serif" }}>
                             
                             {/* Top row */}
-                            <div className="flex justify-between items-center w-full mb-20 relative z-10 w-full shrink-0">
-                                <div className="text-3xl font-serif font-black tracking-widest text-[#2C2A28]">ORLOG.</div>
-                                <div className="text-[#8A8480] font-medium text-xl">orlog.fourg.dev</div>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", marginBottom: "80px", position: "relative", zIndex: 10, flexShrink: 0 }}>
+                                <div style={{ fontSize: "30px", fontFamily: "var(--font-serif)", fontWeight: 900, letterSpacing: "0.1em", color: "#2C2A28" }}>ORLOG.</div>
+                                <div style={{ color: "#8A8480", fontWeight: 500, fontSize: "20px" }}>orlog.fourg.dev</div>
                             </div>
                             
                             {/* Center blocks flex */}
-                            <div className="flex justify-between items-center w-full flex-grow relative z-10">
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", flexGrow: 1, position: "relative", zIndex: 10 }}>
                                 
                                 {/* Left text content */}
-                                <div className="flex flex-col max-w-[500px]">
-                                    <span className="text-[#C45C3A] font-bold tracking-[0.2em] uppercase text-lg mb-6">PM PERSONALITY TYPE</span>
+                                <div style={{ display: "flex", flexDirection: "column", maxWidth: "500px" }}>
+                                    <span style={{ color: "#C45C3A", fontWeight: "bold", letterSpacing: "0.2em", textTransform: "uppercase", fontSize: "18px", marginBottom: "24px" }}>PM PERSONALITY TYPE</span>
                                     
-                                    <h1 className="text-[90px] font-serif font-bold text-[#C45C3A] leading-[1.1] tracking-tight mb-2">
+                                    <h1 style={{ fontSize: "90px", fontFamily: "var(--font-serif)", fontWeight: "bold", color: "#C45C3A", lineHeight: 1.1, letterSpacing: "-0.02em", marginBottom: "8px" }}>
                                         {primaryName}
                                     </h1>
                                     
-                                    <h2 className="text-[36px] font-serif italic text-[#8A8480] mb-8">
+                                    <h2 style={{ fontSize: "36px", fontFamily: "var(--font-serif)", fontStyle: "italic", color: "#8A8480", marginBottom: "32px" }}>
                                         {primarySubtitle}
                                     </h2>
                                     
-                                    <p className="text-[#8A8480] text-[22px] font-medium mb-12">
+                                    <p style={{ color: "#8A8480", fontSize: "22px", fontWeight: 500, marginBottom: "48px" }}>
                                         with traits of {secondaryName} — {secondarySubtitle}
                                     </p>
                                     
                                     <div>
-                                        <div className="inline-flex bg-[#4A7C6F] text-white px-8 py-3 rounded-full text-[26px] font-bold tracking-wide">
+                                        <div style={{ display: "inline-flex", backgroundColor: "#4A7C6F", color: "#ffffff", padding: "12px 32px", borderRadius: "9999px", fontSize: "26px", fontWeight: "bold", letterSpacing: "0.025em" }}>
                                             {data.hybrid_name}
                                         </div>
                                     </div>
                                 </div>
                                 
                                 {/* Right radar chart */}
-                                <div className="scale-[1.8] transform origin-right w-[300px] h-[300px]">
+                                <div style={{ transform: "scale(1.8)", transformOrigin: "right center", width: "300px", height: "300px" }}>
                                     <PMRadarChart scores={data.dimension_scores || {}} />
                                 </div>
                             </div>
 
                             {/* Bottom row */}
-                            <div className="w-full shrink-0 mt-20 relative z-10 border-t-2 border-[#E2DFD8] pt-12 flex justify-between items-center">
-                                <span className="text-[28px] italic font-serif text-[#8A8480]">Know your PM nature.</span>
-                                <span className="text-[22px] font-medium text-[#8A8480]">Take the test at <strong className="text-[#C45C3A]">orlog.fourg.dev</strong></span>
+                            <div style={{ width: "100%", flexShrink: 0, marginTop: "80px", position: "relative", zIndex: 10, borderTop: "2px solid #E2DFD8", paddingTop: "48px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                <span style={{ fontSize: "28px", fontStyle: "italic", fontFamily: "var(--font-serif)", color: "#8A8480" }}>Know your PM nature.</span>
+                                <span style={{ fontSize: "22px", fontWeight: 500, color: "#8A8480" }}>Take the test at <strong style={{ color: "#C45C3A" }}>orlog.fourg.dev</strong></span>
                             </div>
                             
-                            {/* Background decoration */}
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-[#C45C3A]/10 to-[#4A7C6F]/10 rounded-full blur-[100px] -z-0"></div>
+                            {/* Background decoration - Explicit safely constructed radial gradient for Canvas parsing */}
+                            <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "600px", height: "600px", background: "radial-gradient(circle, rgba(196,92,58,0.08) 0%, rgba(74,124,111,0.05) 100%)", borderRadius: "50%", filter: "blur(100px)", zIndex: 0 }}></div>
                         </div>
                     </div>
 

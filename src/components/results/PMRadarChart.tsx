@@ -57,7 +57,7 @@ export default function PMRadarChart({ scores }: RadarChartProps) {
                     </RadarChart>
                 </ResponsiveContainer>
             </div>
-            <p className="text-center text-sm font-medium text-[#8A8480] max-w-md mx-auto mt-4 leading-relaxed px-4">
+            <p style={{ color: "#8A8480" }} className="text-center text-sm font-medium max-w-md mx-auto mt-4 leading-relaxed px-4">
                 Your shape shows where your PM instincts naturally cluster. A taller spike means a stronger tendency — not better or worse, just more you.
             </p>
         </div>
