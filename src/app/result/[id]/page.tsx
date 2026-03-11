@@ -70,12 +70,12 @@ export default function ResultPage() {
 
     const getLinkedInText = () => {
         if (!data) return "";
-        return `I just took the Orlog PM Personality Test and here's what I found out about myself.\n\n🧭 My PM Type: ${data.hybrid_name}\n${primaryName} (${primarySubtitle}) × ${secondaryName} (${secondarySubtitle})\n\nIt's a 15-minute experiential test — 30 real product scenarios that reveal how you actually think, decide, and lead as a PM.\n\nCurious what type you are? Find out here:\norlog.fourg.dev`;
+        return `I just took the Orlog PM Personality Test and here's what I found out about myself.\n\n🧭 My PM Type: ${data.hybrid_name}\n${primaryName} (${primarySubtitle}) × ${secondaryName} (${secondarySubtitle})\n\nIt's a 15-minute experiential test with real product scenarios that reveal how you actually think, decide, and lead as a PM.\n\nCurious what type you are? Find out here: https://orlog.fourg.dev`;
     };
 
     const getTwitterText = () => {
         if (!data) return "";
-        return `Just discovered I'm ${data.hybrid_name} on @OrlogPM — ${primaryName} × ${secondaryName}.\n\nA PM personality test built on real product scenarios, not abstract questions.\n\nFind out your type 👇`;
+        return `Just discovered I'm ${data.hybrid_name} on Orlog — ${primaryName} × ${secondaryName}.\n\nA PM personality test built on real product scenarios, not abstract questions.\n\nFind out your type 👇`;
     };
 
     const handleCopy = async () => {
@@ -116,12 +116,12 @@ export default function ResultPage() {
             const container = document.getElementById("share-card-container");
             
             if (element && container) {
-                // Temporarily move the element into the viewport but hidden (opacity 0, pointer-events none)
+                // Temporarily move the element into the viewport for html2canvas
                 element.style.position = "fixed";
                 element.style.left = "0";
                 element.style.top = "0";
                 element.style.zIndex = "-50";
-                element.style.opacity = "1"; // HTML2Canvas needs it to have opacity > 0 to render children correctly sometimes, but we keep it behind everything
+                element.style.opacity = "1";
                 
                 // Wait a tick for DOM to apply styles
                 await new Promise(resolve => setTimeout(resolve, 100));
@@ -139,15 +139,46 @@ export default function ResultPage() {
                 element.style.top = "-9999px";
                 element.style.zIndex = "auto";
 
-                const url = canvas.toDataURL("image/png");
-                const link = document.createElement("a");
-                link.download = `orlog-result-${data?.hybrid_name?.toLowerCase().replace(/\s+/g, '-')}.png`;
-                link.href = url;
+                const fileName = `orlog-result-${(data?.hybrid_name || 'card').toLowerCase().replace(/\s+/g, '-')}.png`;
                 
-                // Append locally for browser compatibility before triggering click download
+                // Convert canvas to blob via Promise wrapper (keeps async chain intact)
+                const blob = await new Promise<Blob | null>((resolve) => {
+                    canvas.toBlob(resolve, "image/png");
+                });
+                
+                if (!blob) return;
+
+                // Try native File System Access API first (Chrome/Edge — opens a real Save dialog)
+                if ('showSaveFilePicker' in window) {
+                    try {
+                        const handle = await (window as any).showSaveFilePicker({
+                            suggestedName: fileName,
+                            types: [{
+                                description: 'PNG Image',
+                                accept: { 'image/png': ['.png'] }
+                            }]
+                        });
+                        const writable = await handle.createWritable();
+                        await writable.write(blob);
+                        await writable.close();
+                        return; // Done — saved via native dialog
+                    } catch (pickerErr: any) {
+                        // User cancelled the dialog or API unavailable — fall through
+                        if (pickerErr?.name === 'AbortError') return;
+                    }
+                }
+
+                // Fallback: synchronous data URL approach
+                const dataUrl = canvas.toDataURL("image/png");
+                const link = document.createElement("a");
+                link.download = fileName;
+                link.href = dataUrl;
+                link.style.display = "none";
                 document.body.appendChild(link);
                 link.click();
-                document.body.removeChild(link);
+                setTimeout(() => {
+                    document.body.removeChild(link);
+                }, 200);
             }
         } catch (err) {
             console.error("Error generating static card:", err);
@@ -526,55 +557,136 @@ export default function ResultPage() {
                     </motion.section>
 
                     {/* --- HIDDEN HTML2CANVAS CAPTURE TEMPLATE --- */}
-                    {/* Position absolute off-screen but rendered for snapshotting */}
                     <div id="share-card-wrapper" style={{ position: "absolute", left: "-9999px", top: "-9999px" }}>
-                        <div id="share-card-container" style={{ display: "flex", flexDirection: "column", backgroundColor: "#FAF8F4", width: "1080px", height: "1080px", padding: "80px", fontFamily: "'Inter', sans-serif" }}>
+                        <div id="share-card-container" style={{ display: "flex", flexDirection: "column", backgroundColor: "#FAF8F4", width: "1080px", height: "1080px", padding: "60px 70px", fontFamily: "'Inter', sans-serif", overflow: "hidden", position: "relative" }}>
                             
-                            {/* Top row */}
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", marginBottom: "80px", position: "relative", zIndex: 10, flexShrink: 0 }}>
-                                <div style={{ fontSize: "30px", fontFamily: "var(--font-serif)", fontWeight: 900, letterSpacing: "0.1em", color: "#2C2A28" }}>ORLOG.</div>
-                                <div style={{ color: "#8A8480", fontWeight: 500, fontSize: "20px" }}>orlog.fourg.dev</div>
+                            {/* Top row - branding */}
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", marginBottom: "30px", flexShrink: 0, position: "relative", zIndex: 10 }}>
+                                <div style={{ fontSize: "28px", fontFamily: "var(--font-serif)", fontWeight: 900, letterSpacing: "0.1em", color: "#2C2A28" }}>ORLOG.</div>
+                                <div style={{ color: "#8A8480", fontWeight: 500, fontSize: "16px" }}>orlog.fourg.dev</div>
                             </div>
                             
-                            {/* Center blocks flex */}
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", flexGrow: 1, position: "relative", zIndex: 10 }}>
+                            {/* Main content area */}
+                            <div style={{ display: "flex", width: "100%", flexGrow: 1, position: "relative", zIndex: 10 }}>
                                 
                                 {/* Left text content */}
-                                <div style={{ display: "flex", flexDirection: "column", maxWidth: "500px" }}>
-                                    <span style={{ color: "#C45C3A", fontWeight: "bold", letterSpacing: "0.2em", textTransform: "uppercase", fontSize: "18px", marginBottom: "24px" }}>PM PERSONALITY TYPE</span>
+                                <div style={{ display: "flex", flexDirection: "column", width: "50%", paddingRight: "20px" }}>
+                                    <span style={{ color: "#C45C3A", fontWeight: "bold", letterSpacing: "0.2em", textTransform: "uppercase", fontSize: "13px", marginBottom: "12px" }}>PM PERSONALITY TYPE</span>
                                     
-                                    <h1 style={{ fontSize: "90px", fontFamily: "var(--font-serif)", fontWeight: "bold", color: "#C45C3A", lineHeight: 1.1, letterSpacing: "-0.02em", marginBottom: "8px" }}>
+                                    <div style={{ fontSize: "64px", fontFamily: "var(--font-serif)", fontWeight: "bold", color: "#C45C3A", lineHeight: 1.05, letterSpacing: "-0.02em", marginBottom: "4px" }}>
                                         {primaryName}
-                                    </h1>
+                                    </div>
                                     
-                                    <h2 style={{ fontSize: "36px", fontFamily: "var(--font-serif)", fontStyle: "italic", color: "#8A8480", marginBottom: "32px" }}>
+                                    <div style={{ fontSize: "24px", fontFamily: "var(--font-serif)", fontStyle: "italic", color: "#8A8480", marginBottom: "16px" }}>
                                         {primarySubtitle}
-                                    </h2>
+                                    </div>
                                     
-                                    <p style={{ color: "#8A8480", fontSize: "22px", fontWeight: 500, marginBottom: "48px" }}>
+                                    <div style={{ color: "#8A8480", fontSize: "16px", fontWeight: 500, marginBottom: "16px", lineHeight: 1.4 }}>
                                         with traits of {secondaryName} — {secondarySubtitle}
-                                    </p>
+                                    </div>
                                     
-                                    <div>
-                                        <div style={{ display: "inline-flex", backgroundColor: "#4A7C6F", color: "#ffffff", padding: "12px 32px", borderRadius: "9999px", fontSize: "26px", fontWeight: "bold", letterSpacing: "0.025em" }}>
+                                    <div style={{ marginBottom: "20px" }}>
+                                        <span style={{ display: "inline-block", backgroundColor: "#4A7C6F", color: "#ffffff", padding: "8px 20px", borderRadius: "9999px", fontSize: "20px", fontWeight: "bold", letterSpacing: "0.025em" }}>
                                             {data.hybrid_name}
+                                        </span>
+                                    </div>
+
+                                    {/* Type descriptions */}
+                                    <div style={{ borderTop: "1px solid #E2DFD8", paddingTop: "16px", marginTop: "auto" }}>
+                                        <div style={{ fontSize: "12px", fontWeight: 700, color: "#C45C3A", marginBottom: "4px", textTransform: "uppercase", letterSpacing: "0.1em" }}>{primaryName}</div>
+                                        <div style={{ fontSize: "13px", color: "#6B6560", lineHeight: 1.5, marginBottom: "14px" }}>
+                                            {primaryData?.description || ""}
+                                        </div>
+                                        <div style={{ fontSize: "12px", fontWeight: 700, color: "#4A7C6F", marginBottom: "4px", textTransform: "uppercase", letterSpacing: "0.1em" }}>{secondaryName}</div>
+                                        <div style={{ fontSize: "13px", color: "#6B6560", lineHeight: 1.5 }}>
+                                            {secondaryData?.description || ""}
                                         </div>
                                     </div>
                                 </div>
                                 
-                                {/* Right radar chart */}
-                                <div style={{ transform: "scale(1.8)", transformOrigin: "right center", width: "300px", height: "300px" }}>
-                                    <PMRadarChart scores={data.dimension_scores || {}} />
+                                {/* Right: Raw SVG Radar Chart — no Recharts, no bleeding */}
+                                <div style={{ width: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                    {(() => {
+                                        const scores = data.dimension_scores || {};
+                                        const maxScore = 20;
+                                        const dims = ["seer", "forge", "mirror", "compass", "herald", "anchor"];
+                                        const labels = ["Visionary", "Builder", "Advocate", "Analyst", "Diplomat", "Founder"];
+                                        const cx = 200, cy = 200, r = 150;
+                                        
+                                        const getPoint = (i: number, scale: number) => {
+                                            const angle = (Math.PI / 3) * i - (Math.PI / 2);
+                                            return {
+                                                x: cx + r * scale * Math.cos(angle),
+                                                y: cy + r * scale * Math.sin(angle)
+                                            };
+                                        };
+
+                                        const outerPts = dims.map((_, i) => getPoint(i, 1));
+                                        const gridLevels = [0.25, 0.5, 0.75, 1];
+                                        const dataPts = dims.map((d, i) => {
+                                            const val = Math.min(Math.max((scores[d] || 0) / maxScore, 0.1), 1);
+                                            return getPoint(i, val);
+                                        });
+                                        const dataPath = dataPts.map(p => `${p.x},${p.y}`).join(" ");
+
+                                        const labelOffsets = [
+                                            { x: 0, y: -20, anchor: "middle" },
+                                            { x: 16, y: -4, anchor: "start" },
+                                            { x: 16, y: 14, anchor: "start" },
+                                            { x: 0, y: 24, anchor: "middle" },
+                                            { x: -16, y: 14, anchor: "end" },
+                                            { x: -16, y: -4, anchor: "end" },
+                                        ];
+
+                                        return (
+                                            <svg width="420" height="420" viewBox="-10 -10 420 420" style={{ overflow: "hidden" }}>
+                                                {/* Grid rings */}
+                                                {gridLevels.map((level, li) => (
+                                                    <polygon
+                                                        key={`grid-${li}`}
+                                                        points={dims.map((_, i) => { const p = getPoint(i, level); return `${p.x},${p.y}`; }).join(" ")}
+                                                        fill="none"
+                                                        stroke="#E2DFD8"
+                                                        strokeWidth="1"
+                                                    />
+                                                ))}
+                                                {/* Axis lines */}
+                                                {outerPts.map((p, i) => (
+                                                    <line key={`ax-${i}`} x1={cx} y1={cy} x2={p.x} y2={p.y} stroke="#E2DFD8" strokeWidth="1" />
+                                                ))}
+                                                {/* Data polygon */}
+                                                <polygon points={dataPath} fill="rgba(196,92,58,0.35)" stroke="#C45C3A" strokeWidth="2.5" strokeLinejoin="round" />
+                                                {/* Data dots */}
+                                                {dataPts.map((p, i) => (
+                                                    <circle key={`dot-${i}`} cx={p.x} cy={p.y} r="5" fill="#4A7C6F" />
+                                                ))}
+                                                {/* Labels */}
+                                                {outerPts.map((p, i) => (
+                                                    <text
+                                                        key={`lbl-${i}`}
+                                                        x={p.x + labelOffsets[i].x}
+                                                        y={p.y + labelOffsets[i].y}
+                                                        fill="#8A8480"
+                                                        fontSize="15"
+                                                        fontWeight="500"
+                                                        textAnchor={labelOffsets[i].anchor as any}
+                                                        dominantBaseline="central"
+                                                    >
+                                                        {labels[i]}
+                                                    </text>
+                                                ))}
+                                            </svg>
+                                        );
+                                    })()}
                                 </div>
                             </div>
 
-                            {/* Bottom row */}
-                            <div style={{ width: "100%", flexShrink: 0, marginTop: "80px", position: "relative", zIndex: 10, borderTop: "2px solid #E2DFD8", paddingTop: "48px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                <span style={{ fontSize: "28px", fontStyle: "italic", fontFamily: "var(--font-serif)", color: "#8A8480" }}>Know your PM nature.</span>
-                                <span style={{ fontSize: "22px", fontWeight: 500, color: "#8A8480" }}>Take the test at <strong style={{ color: "#C45C3A" }}>orlog.fourg.dev</strong></span>
+                            {/* Bottom row - tagline only */}
+                            <div style={{ width: "100%", flexShrink: 0, marginTop: "20px", position: "relative", zIndex: 10, borderTop: "2px solid #E2DFD8", paddingTop: "16px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                <span style={{ fontSize: "20px", fontStyle: "italic", fontFamily: "var(--font-serif)", color: "#8A8480" }}>Know your PM nature.</span>
                             </div>
                             
-                            {/* Background decoration - Explicit safely constructed solid color block with blur instead of radial-gradient for Canvas parsing */}
+                            {/* Background decoration */}
                             <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "600px", height: "600px", backgroundColor: "rgba(196,92,58,0.04)", borderRadius: "50%", filter: "blur(100px)", zIndex: 0 }}></div>
                         </div>
                     </div>

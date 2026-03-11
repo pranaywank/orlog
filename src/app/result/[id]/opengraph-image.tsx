@@ -19,10 +19,10 @@ const getSubtitle = (type: string) => {
   const map: Record<string, string> = {
     "seer": "The Visionary",
     "forge": "The Builder",
-    "mirror": "The Empath",
-    "compass": "The Strategist",
-    "herald": "The Voice",
-    "anchor": "The Grounding"
+    "mirror": "The Advocate",
+    "compass": "The Analyst",
+    "herald": "The Diplomat",
+    "anchor": "The Founder"
   };
   return map[type] || "The PM";
 };
@@ -253,12 +253,12 @@ export default async function Image({ params }: { params: { id: string } }) {
               ))}
 
               {/* Labels */}
-              <text x="200" y="30" fill="#8A8480" fontSize="12" textAnchor="middle">Seer</text>
-              <text x="370" y="110" fill="#8A8480" fontSize="12" textAnchor="start">Forge</text>
-              <text x="370" y="300" fill="#8A8480" fontSize="12" textAnchor="start">Mirror</text>
-              <text x="200" y="380" fill="#8A8480" fontSize="12" textAnchor="middle">Compass</text>
-              <text x="30" y="300" fill="#8A8480" fontSize="12" textAnchor="end">Herald</text>
-              <text x="30" y="110" fill="#8A8480" fontSize="12" textAnchor="end">Anchor</text>
+              <text x="200" y="30" fill="#8A8480" fontSize="12" textAnchor="middle">Visionary</text>
+              <text x="370" y="110" fill="#8A8480" fontSize="12" textAnchor="start">Builder</text>
+              <text x="370" y="300" fill="#8A8480" fontSize="12" textAnchor="start">Advocate</text>
+              <text x="200" y="380" fill="#8A8480" fontSize="12" textAnchor="middle">Analyst</text>
+              <text x="30" y="300" fill="#8A8480" fontSize="12" textAnchor="end">Diplomat</text>
+              <text x="30" y="110" fill="#8A8480" fontSize="12" textAnchor="end">Founder</text>
             </svg>
           </div>
         </div>

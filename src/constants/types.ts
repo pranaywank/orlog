@@ -78,7 +78,7 @@ export const PM_TYPES = {
         key: "anchor",
         name: "The Sovereign",
         subtitle: "The Founder",
-        color: "#3A3530",
+        color: "#9A9590",
         icon: "👑",
         tagline: "Owns everything, decides fast",
         description: "You own it. You act like a founder, move fast, take accountability, and rarely wait for permission. Where others hesitate, you decide.",

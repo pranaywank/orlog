@@ -17,12 +17,12 @@ export default function PMRadarChart({ scores }: RadarChartProps) {
     // Translate the scores object into Recharts format
     // Fallback to placeholder if scores don't exist
     const data = [
-        { subject: "Seer", A: scores?.seer ?? 12, fullMark: 20 },
-        { subject: "Forge", A: scores?.forge ?? 8, fullMark: 20 },
-        { subject: "Warden", A: scores?.warden ?? 15, fullMark: 20 },
-        { subject: "Sage", A: scores?.sage ?? 10, fullMark: 20 },
-        { subject: "Weaver", A: scores?.weaver ?? 14, fullMark: 20 },
-        { subject: "Sovereign", A: scores?.sovereign ?? 9, fullMark: 20 },
+        { subject: "Visionary", A: scores?.seer ?? 12, fullMark: 20 },
+        { subject: "Builder", A: scores?.forge ?? 8, fullMark: 20 },
+        { subject: "Advocate", A: scores?.warden ?? 15, fullMark: 20 },
+        { subject: "Analyst", A: scores?.sage ?? 10, fullMark: 20 },
+        { subject: "Diplomat", A: scores?.weaver ?? 14, fullMark: 20 },
+        { subject: "Founder", A: scores?.sovereign ?? 9, fullMark: 20 },
     ];
 
     return (

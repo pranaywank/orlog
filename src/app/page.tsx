@@ -114,7 +114,7 @@ export default async function Home() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 3.83 }}
-                className="text-[13px] font-sans text-[#3D3835] flex items-center justify-center gap-1.5"
+                className="text-[13px] font-sans text-[#8A8480] flex items-center justify-center gap-1.5"
               >
                 🧭 {sessionCount.toLocaleString()} PMs have discovered their nature.
               </motion.div>
